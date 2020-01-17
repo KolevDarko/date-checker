@@ -1,0 +1,22 @@
+{
+  "name": "date-check",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "webpack --config webpack.config.js --progress --colors",
+    "watch": "webpack --config webpack.config.js --watch"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
+    "stimulus": "^1.0.1",
+    "webpack": "^3.10.0",
+    "webpack-dev-middleware": "^2.0.4",
+    "webpack-bundle-tracker": "^0.3.0"
+  }
+}
