@@ -8,6 +8,7 @@ verify_ssl = true
 [packages]
 drf-generators = "*"
 django-rest-framework = "*"
+django-webpack-loader = "*"
 
 [requires]
 python_version = "3.7"

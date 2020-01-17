@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 from api import views
+from dashboard.views import HomeView
 
 router = routers.DefaultRouter()
 router.register(r'stores', views.StoreViewSet)
@@ -27,6 +28,7 @@ router.register(r'products-in-store', views.ProductInStoreViewSet)
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
+    path('home', HomeView.as_view(), name='home'),
     path('admin/', admin.site.urls, name='admin'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

@@ -6,12 +6,12 @@ module.exports = {
   context: __dirname,
 
   entry: {
-    bundle: "./public/javascripts/index.js"
+    bundle: "./frontend/src/index.js"
   },
   mode: 'development',
   output: {
-    filename: "bundle.js",
-    path: path.resolve("./public/bundles")
+    filename: "[name].js",
+    path: path.resolve("./frontend/bundles")
   },
 
   devtool: "source-map",
