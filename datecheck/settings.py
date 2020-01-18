@@ -13,10 +13,10 @@ from sys import path
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 path.append(BASE_DIR)
 
-PROJECT_ROOT = BASE_DIR
+PROJECT_ROOT = os.path.dirname(BASE_DIR)
 
 PROJECT_CONTAINER = os.path.dirname(PROJECT_ROOT)
 
@@ -34,7 +34,7 @@ ALLOWED_HOSTS = []
 WEBPACK_LOADER = {
     'DEFAULT': {
         'BUNDLE_DIR_NAME': 'bundles/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
+        'STATS_FILE': os.path.join(PROJECT_ROOT, 'webpack-stats.json'),
     }
 }
 # Application definition

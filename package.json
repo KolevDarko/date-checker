@@ -13,13 +13,11 @@
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/preset-env": "^7.5.0",
+    "@fortawesome/fontawesome-free": "^5.11.2",
     "babel": "^6.23.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.0.6",
     "babel-preset-env": "^1.7.0",
-    "stimulus": "^1.1.1",
-    "webpack-bundle-tracker": "^0.4.3",
-    "@fortawesome/fontawesome-free": "^5.11.2",
     "bulma": "^0.8.0",
     "chai": "^4.2.0",
     "css-loader": "^3.2.0",
@@ -30,8 +28,10 @@
     "node-sass": "^4.13.0",
     "sass": "^1.23.7",
     "sass-loader": "^8.0.0",
+    "stimulus": "^1.1.1",
     "style-loader": "^1.0.1",
     "webpack": "^4.41.2",
+    "webpack-bundle-tracker": "^0.4.3",
     "webpack-cli": "^3.3.10"
   }
 }

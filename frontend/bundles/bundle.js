@@ -203,6 +203,19 @@ var context = __webpack_require__("./frontend/src/controllers sync recursive \\.
 
 application.load(Object(stimulus_webpack_helpers__WEBPACK_IMPORTED_MODULE_1__["definitionsFromContext"])(context));
 
+__webpack_require__(/*! ./mystyles.scss */ "./frontend/src/mystyles.scss");
+
+/***/ }),
+
+/***/ "./frontend/src/mystyles.scss":
+/*!************************************!*\
+  !*** ./frontend/src/mystyles.scss ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
 /***/ }),
 
 /***/ "./node_modules/@stimulus/core/dist/index.js":

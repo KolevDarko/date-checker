@@ -19,7 +19,7 @@ module.exports = {
   plugins: [
     new BundleTracker({filename: './webpack-stats.json'}),
     new MiniCssExtractPlugin({
-      filename: 'css/mystyles.css'
+      filename: '../../datecheck/static/css/mystyles.css'
     }),
   ],
 

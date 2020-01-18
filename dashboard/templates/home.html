@@ -1,4 +1,6 @@
+{% load static %}
 {% load render_bundle from webpack_loader %}
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -7,13 +9,24 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/mystyles.css' %}">
 </head>
 <body>
+<section class="hero is-info">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        Hero title
+      </h1>
+      <h2 class="subtitle">
+        Hero subtitle
+      </h2>
+    </div>
+  </div>
+</section>
 <div data-controller="index">
   <h1>Hello world and you</h1>
 </div>
-
-  {% render_bundle 'bundle' %}
-
+<script type="application/javascript" src="{% static 'bundles/bundle.js' %}"></script>
 </body>
 </html>
