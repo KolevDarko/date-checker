@@ -29,6 +29,7 @@ router.register(r'products-in-store', views.ProductInStoreViewSet)
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
+    path('accounts/', include('django.contrib.auth.urls')),
     url(r'dash/', include('dashboard.urls')),
     path('home', HomeView.as_view(), name='home'),
     path('admin/', admin.site.urls, name='admin'),

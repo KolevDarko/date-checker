@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 class ModelMixin():
 
@@ -7,7 +8,7 @@ class ModelMixin():
         return cls.objects.get(pk=id)
 
 class Company(models.Model):
-
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, related_name='user_companies')
     name = models.CharField(max_length=200)
 
 class Store(models.Model, ModelMixin):
