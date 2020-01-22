@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <nav class="breadcrumb" aria-label="breadcrumbs">
+    <ul>
+      <li><a href="../">Bulma</a></li>
+      <li><a href="../">Templates</a></li>
+      <li><a href="../">Examples</a></li>
+      <li class="is-active"><a href="#" aria-current="page">Admin</a></li>
+    </ul>
+  </nav>
+  <section class="hero is-info welcome is-small">
+    <div class="hero-body">
+      <div class="container">
+        <h1 class="title">
+          Hello, Admin.
+        </h1>
+        <h2 class="subtitle">
+          I hope you are having a great day!
+        </h2>
+      </div>
+    </div>
+  </section>
+  <section class="form">
+    <form method="POST" action="">
+      <div class="field">
+        <label class="label">Име</label>
+        <div class="control">
+          <input class="input is-medium" type="text">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Баркод</label>
+        <div class="control">
+          <input class="input is-medium" type="text">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Цена</label>
+        <div class="control">
+          <input class="input is-medium" type="number">
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Message</label>
+        <div class="control">
+          <textarea class="textarea is-medium"></textarea>
+        </div>
+      </div>
+      <div class="control">
+        <button type="submit" class="button is-link is-fullwidth has-text-weight-medium is-medium">Снимај производ</button>
+      </div>
+    </form>
+  </section>
+{% endblock %}

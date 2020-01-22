@@ -8,25 +8,49 @@
   <meta name="viewport"
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>Date Check Master</title>
   <link rel="stylesheet" type="text/css" href="{% static 'css/mystyles.css' %}">
 </head>
 <body>
-<section class="hero is-info">
-  <div class="hero-body">
+<aside class="menu">
+  <p class="menu-label">
+    Производи
+  </p>
+  <ul class="menu-list">
+    <li><a href="{% static 'dash/product-list' %}">Производи</a></li>
+    <li><a href="{% static 'dash/add-product' %}">Додај производ</a></li>
+  </ul>
+  <p class="menu-label">
+    Administration
+  </p>
+  <ul class="menu-list">
+    <li><a>Team Settings</a></li>
+    <li><a>Invitations</a></li>
+    <li><a>Cloud Storage Environment Settings</a></li>
+    <li><a>Authentication</a></li>
+  </ul>
+  <p class="menu-label">
+    Transactions
+  </p>
+  <ul class="menu-list">
+    <li><a>Payments</a></li>
+    <li><a>Transfers</a></li>
+    <li><a>Balance</a></li>
+  </ul>
+</aside>
+<div class="main-container">
+  <section class="section main-section">
     <div class="container">
       <h1 class="title">
-        Hero title
+        Hello World
       </h1>
-      <h2 class="subtitle">
-        Hero subtitle
-      </h2>
+      <p class="subtitle">
+        My first website with <strong>Bulma</strong>!
+      </p>
     </div>
-  </div>
-</section>
-<div data-controller="index">
-  <h1>Hello world and you</h1>
+  </section>
 </div>
+
 <script type="application/javascript" src="{% static 'bundles/bundle.js' %}"></script>
 </body>
 </html>
