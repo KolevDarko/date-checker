@@ -7,49 +7,36 @@
       <li><a href="../">Bulma</a></li>
       <li><a href="../">Templates</a></li>
       <li><a href="../">Examples</a></li>
-      <li class="is-active"><a href="#" aria-current="page">Admin</a></li>
+      <li class="is-active"><a href="#" aria-current="page">Додај производ</a></li>
     </ul>
   </nav>
-  <section class="hero is-info welcome is-small">
-    <div class="hero-body">
-      <div class="container">
-        <h1 class="title">
-          Hello, Admin.
-        </h1>
-        <h2 class="subtitle">
-          I hope you are having a great day!
-        </h2>
-      </div>
-    </div>
-  </section>
+  <div class="title">Додади нов производ</div>
+  <div class="subtitle has-text-success">{{ message }}</div>
+  <div class="subtitle has-text-danger">{{ error }}</div>
+  {{ form.non_field_errors }}
   <section class="form">
     <form method="POST" action="">
+      {% csrf_token %}
       <div class="field">
         <label class="label">Име</label>
         <div class="control">
-          <input class="input is-medium" type="text">
+          <input class="input is-medium" type="text" name="name" required>
         </div>
       </div>
       <div class="field">
         <label class="label">Баркод</label>
         <div class="control">
-          <input class="input is-medium" type="text">
+          <input class="input is-medium" type="text" name="barcode" required>
         </div>
       </div>
       <div class="field">
         <label class="label">Цена</label>
         <div class="control">
-          <input class="input is-medium" type="number">
-        </div>
-      </div>
-      <div class="field">
-        <label class="label">Message</label>
-        <div class="control">
-          <textarea class="textarea is-medium"></textarea>
+          <input class="input is-medium" type="number" name="price" required>
         </div>
       </div>
       <div class="control">
-        <button type="submit" class="button is-link is-fullwidth has-text-weight-medium is-medium">Снимај производ</button>
+        <button type="submit" class="button is-link is-fullwidth has-text-weight-medium is-medium">Зачувај</button>
       </div>
     </form>
   </section>

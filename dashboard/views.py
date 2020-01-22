@@ -1,25 +1,45 @@
 from django.shortcuts import render
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views import View, generic
+from django.views import generic
 
-from api.models import ProductInStore
-
-
-class HomeView(View):
-
-    def get(self, request):
-        return render(request, 'dashboard/home.html', {})
+from api.models import ProductInStore, Product
+from dashboard.forms import ProductForm
 
 
-class AddProduct(LoginRequiredMixin, generic.CreateView):
+class AddProduct(generic.CreateView):
 
-    def get(self, request):
-        pass
+    model = Product
+
+    def get(self, request, *args):
+        return render(request, 'dashboard/product-add.html', {})
+
+    def render_success(self):
+        product_name = self.request.POST['name']
+        context = {
+            'message': 'Производот {} е снимен'.format(product_name)
+        }
+        return render(self.request, 'dashboard/product-add.html', context)
+
+    def company_id(self):
+        user = self.request.user
+        return user.company_id
+
+    def post(self, request, *args):
+        product_form = ProductForm(request.POST)
+        if product_form.is_valid():
+            new_product = product_form.instance
+            new_product.company_id = self.company_id()
+            product_form.save()
+            return self.render_success()
+        else:
+            return render(request, 'dashboard/product-add.html', {
+                'errors': product_form.errors
+            })
 
 
-class ProductList(LoginRequiredMixin, generic.ListView):
+
+class HomeView(generic.ListView):
 
     model = ProductInStore
 
     def get(self, request, *args, **kwargs):
-        pass
+        return render(request, 'dashboard/home.html', {})
