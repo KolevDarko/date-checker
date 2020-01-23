@@ -35,7 +35,6 @@
             Logout
           </a>
                 </div>
-
             </div>
         </div>
     </nav>
@@ -45,39 +44,17 @@
             <div class="column is-3 ">
                 <aside class="menu is-hidden-mobile">
                     <p class="menu-label">
+                        Предупредувања
+                    </p>
+                    <ul class="menu-list">
+                        <li><a href="{% url 'dash-warnings' %}" class="{% if request.resolver_match.url_name == "dash-warnings" %}is-active{% endif %}">Изминат рок</a></li>
+                    </ul>
+                    <p class="menu-label">
                         Производи
                     </p>
                     <ul class="menu-list">
                         <li><a href="{% url 'dash-product-list' %}" class="{% if request.resolver_match.url_name == "dash-product-list" %}is-active{% endif %}">Листа на производи</a></li>
                         <li><a href="{% url 'dash-product-add' %}" class="{% if request.resolver_match.url_name == "dash-product-add" %}is-active{% endif %}">Додај производ</a></li>
-                    </ul>
-                    <p class="menu-label">
-                        Administration
-                    </p>
-                    <ul class="menu-list">
-                        <li><a>Team Settings</a></li>
-                        <li>
-                            <a>Manage Your Team</a>
-                            <ul>
-                                <li><a>Members</a></li>
-                                <li><a>Plugins</a></li>
-                                <li><a>Add a member</a></li>
-                                <li><a>Remove a member</a></li>
-                            </ul>
-                        </li>
-                        <li><a>Invitations</a></li>
-                        <li><a>Cloud Storage Environment Settings</a></li>
-                        <li><a>Authentication</a></li>
-                        <li><a>Payments</a></li>
-                    </ul>
-                    <p class="menu-label">
-                        Transactions
-                    </p>
-                    <ul class="menu-list">
-                        <li><a>Payments</a></li>
-                        <li><a>Transfers</a></li>
-                        <li><a>Balance</a></li>
-                        <li><a>Reports</a></li>
                     </ul>
                 </aside>
             </div>

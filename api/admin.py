@@ -1,9 +1,9 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import ProductInStore, Store, Product, Company
+from .models import ProductBatch, Store, Product, Companies
 
-admin.site.register(Company)
+admin.site.register(Companies)
 admin.site.register(Store)
 admin.site.register(Product)
-admin.site.register(ProductInStore)
+admin.site.register(ProductBatch)

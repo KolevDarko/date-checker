@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views import generic
 
-from api.models import ProductInStore, Product
+from api.models import ProductBatch, Product
 from dashboard.forms import ProductForm
 
 
@@ -22,7 +22,8 @@ class AddProduct(LoginRequiredMixin, generic.CreateView):
 
     def company_id(self):
         user = self.request.user
-        return user.user_companies.first()
+        company = user.user_companies.first()
+        return company.id
 
     def post(self, request, *args):
         product_form = ProductForm(request.POST)
@@ -39,7 +40,12 @@ class AddProduct(LoginRequiredMixin, generic.CreateView):
 
 class HomeView(LoginRequiredMixin, generic.ListView):
 
-    model = ProductInStore
+    model = ProductBatch
 
     def get(self, request, *args, **kwargs):
         return render(request, 'dashboard/home.html', {})
+
+class ExpirationWarning(LoginRequiredMixin, generic.ListView):
+
+    def get(self, *args):
+        pass

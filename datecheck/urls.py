@@ -23,7 +23,7 @@ from dashboard.views import HomeView
 router = routers.DefaultRouter()
 router.register(r'stores', views.StoreViewSet)
 router.register(r'products', views.ProductViewSet)
-router.register(r'products-in-store', views.ProductInStoreViewSet)
+router.register(r'products-in-store', views.ProductBatchViewSet)
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

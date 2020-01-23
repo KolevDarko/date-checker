@@ -20,10 +20,10 @@ class StoreViewSet(viewsets.ModelViewSet):
     queryset = Store.objects.all()
     serializer_class = StoreSerializer
 
-class ProductInStoreViewSet(viewsets.ModelViewSet):
+class ProductBatchViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = ProductInStore.objects.all()
-    serializer_class = ProductInStoreSerializer
+    queryset = ProductBatch.objects.all()
+    serializer_class = ProductBatchSerializer
 

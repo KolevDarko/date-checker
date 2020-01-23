@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.models import Store, Product, ProductInStore
+from api.models import Store, Product, ProductBatch
 
 
 class StoreSerializer(serializers.HyperlinkedModelSerializer):
@@ -13,7 +13,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
         model = Product
         fields = '__all__'
 
-class ProductInStoreSerializer(serializers.HyperlinkedModelSerializer):
+class ProductBatchSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = ProductInStore
+        model = ProductBatch
         fields = '__all__'
