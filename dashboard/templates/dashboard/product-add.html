@@ -4,13 +4,13 @@
 {% block content %}
   <nav class="breadcrumb" aria-label="breadcrumbs">
     <ul>
-      <li><a href="{% url 'dash-product-list' %}">Почетна</a></li>
+      <li><a href="{% url 'home' %}">Почетна</a></li>
       <li class="is-active"><a href="#" aria-current="page">Додај производ</a></li>
     </ul>
   </nav>
   <div class="title">Додади нов производ</div>
   <div class="subtitle has-text-success">{{ message }}</div>
-  <div class="subtitle has-text-danger">{{ error }}</div>
+  <div class="subtitle has-text-danger">{{ errors }}</div>
   {{ form.non_field_errors }}
   <section class="form">
     <form method="POST" action="">
@@ -18,13 +18,13 @@
       <div class="field">
         <label class="label">Име</label>
         <div class="control">
-          <input class="input is-medium" type="text" name="name" required>
+          <input class="input is-medium" type="text" name="name" required autofocus>
         </div>
       </div>
       <div class="field">
-        <label class="label">Баркод</label>
+        <label class="label">Шифра</label>
         <div class="control">
-          <input class="input is-medium" type="text" name="barcode" required>
+          <input class="input is-medium" type="text" name="id_code" required>
         </div>
       </div>
       <div class="field">

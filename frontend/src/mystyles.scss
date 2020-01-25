@@ -3,6 +3,8 @@
 
 // Layout
 
+// Product list
+
 //aside.menu{
 //    width: 20%;
 //    position: fixed!important;
@@ -96,4 +98,14 @@ nav.navbar {
 .events-card .card-table {
   max-height: 250px;
   overflow-y: scroll;
+}
+
+
+// Product list
+.pagination-table{
+    margin: 20px;
+}
+
+.pagination-table table{
+    width: 100%;
 }

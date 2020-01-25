@@ -2,11 +2,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views import generic
 
-from api.models import ProductBatch, Product
+from api.models import Product, Store
 from dashboard.forms import ProductForm
 
 
-class AddProduct(LoginRequiredMixin, generic.CreateView):
+class AddProductView(LoginRequiredMixin, generic.CreateView):
 
     model = Product
 
@@ -20,16 +20,11 @@ class AddProduct(LoginRequiredMixin, generic.CreateView):
         }
         return render(self.request, 'dashboard/product-add.html', context)
 
-    def company_id(self):
-        user = self.request.user
-        company = user.user_companies.first()
-        return company.id
-
     def post(self, request, *args):
         product_form = ProductForm(request.POST)
         if product_form.is_valid():
             new_product = product_form.instance
-            new_product.company_id = self.company_id()
+            new_product.company_id = self.request.user.company_id
             product_form.save()
             return self.render_success()
         else:
@@ -38,9 +33,15 @@ class AddProduct(LoginRequiredMixin, generic.CreateView):
             })
 
 
-class HomeView(LoginRequiredMixin, generic.ListView):
+class ProductListView(LoginRequiredMixin, generic.ListView):
 
-    model = ProductBatch
+    model = Product
+    template_name = 'dashboard/product-list.html'
+    paginate_by = 3
+
+class CompanyHomeView(LoginRequiredMixin, generic.ListView):
+
+    model = Store
 
     def get(self, request, *args, **kwargs):
         return render(request, 'dashboard/home.html', {})
