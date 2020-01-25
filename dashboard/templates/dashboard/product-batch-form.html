@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <nav class="breadcrumb" aria-label="breadcrumbs">
+    <ul>
+      <li><a href="{% url 'home' %}">Почетна</a></li>
+      <li class="is-active"><a href="#" aria-current="page">Додај пратка</a></li>
+    </ul>
+  </nav>
+  <div class="title">Додади нова пратка</div>
+  <div class="subtitle has-text-success">{{ message }}</div>
+  <div class="subtitle has-text-danger">{{ errors }}</div>
+  {{ form.non_field_errors }}
+  <section class="form">
+    <form method="POST" action="">
+      {% csrf_token %}
+      {{ form }}
+      <div class="control">
+        <button type="submit" class="button is-link is-fullwidth has-text-weight-medium is-medium">Зачувај</button>
+      </div>
+    </form>
+  </section>
+{% endblock %}

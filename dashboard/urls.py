@@ -1,10 +1,11 @@
 from django.conf.urls import url
 
-from .views import AddProductView, CompanyHomeView, ExpirationWarning, ProductListView
+from .views import AddProductView, CompanyHomeView, ExpirationWarning, ProductListView, ProductBatchAddView
 
 urlpatterns = [
     url(r'product-list$', ProductListView.as_view(), name='dash-product-list'),
     url(r'product-add$', AddProductView.as_view(), name='dash-product-add'),
     url(r'product-expiration$', ExpirationWarning.as_view(), name='dash-warnings'),
+    url(r'product-batch-add$', ProductBatchAddView.as_view(), name='dash-product-batch-add'),
     url(r'', CompanyHomeView.as_view(), name='home'),
 ]

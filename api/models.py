@@ -28,6 +28,8 @@ class ProductBatch(models.Model, ModelMixin):
     quantity = models.IntegerField()
     expiration_date = models.DateField()
     id_code = models.CharField(max_length=100)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
 class BatchWarning(models.Model):
 

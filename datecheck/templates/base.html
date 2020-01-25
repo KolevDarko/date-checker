@@ -43,11 +43,18 @@
         <div class="columns">
             <div class="column is-3 ">
                 <aside class="menu is-hidden-mobile">
+
                     <p class="menu-label">
                         Предупредувања
                     </p>
                     <ul class="menu-list">
                         <li><a href="{% url 'dash-warnings' %}" class="{% if request.resolver_match.url_name == "dash-warnings" %}is-active{% endif %}">Изминат рок</a></li>
+                    </ul>
+                    <p class="menu-label">
+                        Пратки
+                    </p>
+                    <ul class="menu-list">
+                        <li><a href="{% url 'dash-product-batch-add' %}" class="{% if request.resolver_match.url_name == "dash-product-batch-add" %}is-active{% endif %}">Додај нова пратка</a></li>
                     </ul>
                     <p class="menu-label">
                         Производи

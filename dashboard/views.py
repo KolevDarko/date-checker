@@ -2,8 +2,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views import generic
 
-from api.models import Product, Store
-from dashboard.forms import ProductForm
+from api.models import Product, Store, ProductBatch
+from dashboard.forms import ProductForm, ProductBatchForm
 
 
 class AddProductView(LoginRequiredMixin, generic.CreateView):
@@ -50,3 +50,13 @@ class ExpirationWarning(LoginRequiredMixin, generic.ListView):
 
     def get(self, *args):
         pass
+
+class ProductBatchAddView(LoginRequiredMixin, generic.CreateView):
+
+    model = ProductBatch
+    form_class = ProductBatchForm
+    template_name = 'dashboard/product-batch-form.html'
+
+    def get(self, request, *args):
+        self.get_form()
+

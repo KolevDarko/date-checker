@@ -15,22 +15,29 @@
     {% endif %}
   {% endif %}
 
-  <form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    <table>
-      <tr>
-        <td>Корисничко име</td>
-        <td>{{ form.username }}</td>
-      </tr>
-      <tr>
-        <td>Лозинка</td>
-        <td>{{ form.password }}</td>
-      </tr>
-    </table>
-
-    <input type="submit" value="login">
-    <input type="hidden" name="next" value="{{ next }}">
-  </form>
+  <section class="hero is-info welcome is-small">
+    <div class="hero-body">
+      <div class="container">
+      <form method="post" action="{% url 'login' %}">
+          {% csrf_token %}
+          <div class="field">
+            <label class="label">Корисничко име</label>
+            <div class="control">
+              <input class="input" type="text" name="username" autofocus maxlength="150" required>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Лозинка</label>
+            <div class="control">
+              <input class="input" type="password" name="password" required autocomplete="off">
+            </div>
+          </div>
+          <input class="button" type="submit" value="Login">
+          <input type="hidden" name="next" value="{{ next }}">
+        </form>
+      </div>
+    </div>
+  </section>
 
   {# Assumes you setup the password_reset view in your URLconf #}
   <p><a href="#">Заборави лозинка?</a></p>
