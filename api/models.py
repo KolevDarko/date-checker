@@ -15,11 +15,17 @@ class Store(models.Model, ModelMixin):
     name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
 
+    def __str__(self):
+        return self.name
+
 class Product(models.Model, ModelMixin):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='company_products')
     name = models.CharField(max_length=300)
     price = models.FloatField()
     id_code = models.CharField(max_length=100)
+
+    def __str__(self):
+        return "{} ({})".format(self.name, self.id_code)
 
 class ProductBatch(models.Model, ModelMixin):
 

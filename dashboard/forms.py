@@ -9,10 +9,11 @@ class ProductForm(ModelForm):
         model = Product
         fields = ['name', 'price', 'id_code']
 
-class ProductBatchForm(forms.Form):
-    # name = forms.CharField(max_length=100)
-    # authors = forms.ModelMultipleChoiceField(queryset=Author.objects.all())
-    # store = forms.ModelChoiceField(queryset=Store.objects.all())
+class ProductBatchForm(forms.ModelForm):
     class Meta:
         model = ProductBatch
         fields = ['store', 'product', 'quantity', 'expiration_date', 'id_code']
+
+    def __init__(self, company_id, *args, **kwargs):
+        super(ProductBatchForm, self).__init__(*args, **kwargs)
+        self.fields['product'].queryset = Product.objects.filter(company_id=company_id)

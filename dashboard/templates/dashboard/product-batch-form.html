@@ -15,7 +15,7 @@
   <section class="form">
     <form method="POST" action="">
       {% csrf_token %}
-      {{ form }}
+      {{ form.as_p }}
       <div class="control">
         <button type="submit" class="button is-link is-fullwidth has-text-weight-medium is-medium">Зачувај</button>
       </div>

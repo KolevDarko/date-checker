@@ -58,5 +58,26 @@ class ProductBatchAddView(LoginRequiredMixin, generic.CreateView):
     template_name = 'dashboard/product-batch-form.html'
 
     def get(self, request, *args):
-        self.get_form()
+        form = ProductBatchForm(request.user.company_id)
+        return render(request, self.template_name, {'form': form})
 
+    def post(self, request, *args):
+        form = self.get_form()
+        if form.is_valid():
+            form.save()
+            new_form = ProductBatchForm(self.request.user.company_id, initial={'store': form.cleaned_data['store'].id,
+                                                                               'product': form.cleaned_data['product'].id})
+            return render(request, self.template_name, {'form': new_form})
+        else:
+            return render(request, self.template_name, {'form': form})
+
+    def get_empty_form(self):
+        return ProductBatchForm(self.request.user.company_id)
+
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
+        return form_class(self.request.user.company_id, **self.get_form_kwargs())
+
+    def get_success_url(self):
+        return '/dash/product-batch-add'
