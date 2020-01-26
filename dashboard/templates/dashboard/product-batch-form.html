@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% block css_init %}
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
+  {% endblock %}
 {% block content %}
   <nav class="breadcrumb" aria-label="breadcrumbs">
     <ul>
@@ -12,13 +14,66 @@
   <div class="subtitle has-text-success">{{ message }}</div>
   <div class="subtitle has-text-danger">{{ errors }}</div>
   {{ form.non_field_errors }}
-  <section class="form">
-    <form method="POST" action="">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <div class="control">
-        <button type="submit" class="button is-link is-fullwidth has-text-weight-medium is-medium">Зачувај</button>
+  <section data-controller="product-batch">
+    <div class="columns">
+      <div class="is-column is-8">
+        <form method="post" action="{% url 'login' %}">
+          <div>
+            {{ form.non_field_errors }}
+          </div>
+          {% csrf_token %}
+          <div class="field">
+            {{ form.store.errors }}
+            <label for="id_store" class="label">Store</label>
+            <div class="control">
+              <select id="id_store" required name="store" class="select">
+                {% for option in form.store.field.choices %}
+                  <option value="{{ option.0 }}">{{ option.1 }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            {{ form.product.errors }}
+            <label for="id_product" class="label">Product</label>
+            <div class="control">
+              <select id="id_product" required name="product" class="select" data-target="product-batch.productSelect">
+                {% for option in form.product.field.choices %}
+                  <option value="{{ option.0 }}">{{ option.1 }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            {{ form.quantity.errors }}
+            <label for="id_quantity" class="label">Quantity</label>
+            <div class="control">
+              <input class="input" required name="quantity" id="id_quantity">
+            </div>
+          </div>
+
+          <div class="field">
+            {{ form.id_code.errors }}
+            <label for="id_id_code" class="label">Id code</label>
+            <div class="control">
+              <input class="input" required name="id_code" id="id_id_code">
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <button type="submit" class="button is-link has-text-weight-medium is-medium">Зачувај
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   </section>
+{% endblock %}
+
+{% block js_init %}
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 {% endblock %}
