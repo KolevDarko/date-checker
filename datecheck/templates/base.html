@@ -56,6 +56,7 @@
                         Пратки
                     </p>
                     <ul class="menu-list">
+                        <li><a href="{% url 'dash-product-batch-list' %}" class="{% if request.resolver_match.url_name == "dash-product-batch-list" %}is-active{% endif %}">Листа на пратки</a></li>
                         <li><a href="{% url 'dash-product-batch-add' %}" class="{% if request.resolver_match.url_name == "dash-product-batch-add" %}is-active{% endif %}">Додај нова пратка</a></li>
                     </ul>
                     <p class="menu-label">

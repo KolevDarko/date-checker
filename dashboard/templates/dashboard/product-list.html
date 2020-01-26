@@ -43,7 +43,7 @@
         <a href="?page=1" class="pagination-link">1</a>
         <li><span class="pagination-ellipsis">&hellip;</span></li>
         {% if page_obj.has_previous %}
-          <li><a class="pagination-link is-current" href="?page={{ page_obj.previous_page_number }}" aria-label="Page {{page_obj.previous_page_number}}" aria-current="page">{{page_obj.previous_page_number}}</a></li>
+          <li><a class="pagination-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Page {{page_obj.previous_page_number}}" aria-current="page">{{page_obj.previous_page_number}}</a></li>
         {% endif %}
         <li><a class="pagination-link is-current" aria-label="Page {{page_obj.number}}" aria-current="page">{{page_obj.number}}</a></li>
       {% if page_obj.has_next %}

@@ -232,6 +232,7 @@ function (_Controller) {
       var that = this;
       $(document).ready(function () {
         $(that.productSelectTarget).select2();
+        $(that.locationSelectTarget).select2();
       });
     }
   }]);
@@ -239,7 +240,7 @@ function (_Controller) {
   return _default;
 }(stimulus__WEBPACK_IMPORTED_MODULE_0__["Controller"]);
 
-_defineProperty(_default, "targets", ['productSelect']);
+_defineProperty(_default, "targets", ['productSelect', 'locationSelect']);
 
 
 

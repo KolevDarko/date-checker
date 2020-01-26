@@ -18,6 +18,10 @@ class Store(models.Model, ModelMixin):
     def __str__(self):
         return self.name
 
+    @classmethod
+    def by_company(cls, company_id):
+        return cls.objects.filter(company_id=company_id)
+
 class Product(models.Model, ModelMixin):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='company_products')
     name = models.CharField(max_length=300)
@@ -26,6 +30,10 @@ class Product(models.Model, ModelMixin):
 
     def __str__(self):
         return "{} ({})".format(self.name, self.id_code)
+
+    @classmethod
+    def by_company(cls, company_id):
+        return cls.objects.filter(company_id=company_id)
 
 class ProductBatch(models.Model, ModelMixin):
 

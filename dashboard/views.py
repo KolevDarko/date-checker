@@ -32,12 +32,31 @@ class AddProductView(LoginRequiredMixin, generic.CreateView):
                 'errors': product_form.errors
             })
 
+class ProductBatchListView(LoginRequiredMixin, generic.ListView):
+    model = ProductBatch
+    template_name = 'dashboard/product-batch-list.html'
+    paginate_by = 3
+
+    def get_queryset(self):
+        return ProductBatch.objects.filter(product__company_id=self.request.user.company_id)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductBatchListView, self).get_context_data(object_list=None, **kwargs)
+        context['store_list'] = Store.by_company(self.request.user.company_id)
+        context['product_list'] = Product.by_company(self.request.user.company_id)
+        return context
+
+    # def get(self, request, *args, **kwargs):
+    #     super(ProductBatchListView, self).get(request)
 
 class ProductListView(LoginRequiredMixin, generic.ListView):
 
     model = Product
     template_name = 'dashboard/product-list.html'
     paginate_by = 3
+
+    def get_queryset(self):
+        return Product.objects.filter(company_id=self.request.user.company_id)
 
 class CompanyHomeView(LoginRequiredMixin, generic.ListView):
 

@@ -24,9 +24,9 @@
           {% csrf_token %}
           <div class="field">
             {{ form.store.errors }}
-            <label for="id_store" class="label">Store</label>
+            <label for="id_store" class="label">Location</label>
             <div class="control">
-              <select id="id_store" required name="store" class="select">
+              <select id="id_store" required name="store" class="select" data-target="product-batch.locationSelect">
                 {% for option in form.store.field.choices %}
                   <option value="{{ option.0 }}">{{ option.1 }}</option>
                 {% endfor %}
@@ -59,6 +59,14 @@
             <label for="id_id_code" class="label">Id code</label>
             <div class="control">
               <input class="input" required name="id_code" id="id_id_code">
+            </div>
+          </div>
+
+          <div class="field">
+            {{ form.expiration_date.errors }}
+            <label for="id_expiration_date" class="label">Expiration date</label>
+            <div class="control">
+              <input class="input" required name="expiration_date" id="id_expiration_date">
             </div>
           </div>
 
