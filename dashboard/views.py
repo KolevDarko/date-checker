@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views import generic
 
+from api.filters import ProductBatchFilter
 from api.models import Product, Store, ProductBatch
 from dashboard.forms import ProductForm, ProductBatchForm
 
@@ -33,17 +34,21 @@ class AddProductView(LoginRequiredMixin, generic.CreateView):
             })
 
 class ProductBatchListView(LoginRequiredMixin, generic.ListView):
+    filterset_class = ProductBatchFilter
     model = ProductBatch
     template_name = 'dashboard/product-batch-list.html'
     paginate_by = 3
 
     def get_queryset(self):
-        return ProductBatch.objects.filter(product__company_id=self.request.user.company_id)
+        queryset = ProductBatch.objects.filter(product__company_id=self.request.user.company_id).order_by('expiration_date')
+        self.filterset = self.filterset_class(self.request.GET, queryset=queryset)
+        return self.filterset.qs.distinct()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(ProductBatchListView, self).get_context_data(object_list=None, **kwargs)
         context['store_list'] = Store.by_company(self.request.user.company_id)
         context['product_list'] = Product.by_company(self.request.user.company_id)
+        context['filterset'] = self.filterset
         return context
 
     # def get(self, request, *args, **kwargs):

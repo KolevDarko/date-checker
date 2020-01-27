@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'webpack_loader',
     'rest_framework',
     'drf_generators',
+    'django_filters',
     'my_accounts',
     'api',
     'dashboard',

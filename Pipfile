@@ -9,6 +9,7 @@ verify_ssl = true
 drf-generators = "*"
 django-rest-framework = "*"
 django-webpack-loader = "*"
+django-filter = "*"
 
 [requires]
 python_version = "3.7"
