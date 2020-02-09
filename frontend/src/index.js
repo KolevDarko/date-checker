@@ -7,5 +7,4 @@ const application = Application.start(document.documentElement, {
 });
 const context = require.context("./controllers", true, /\.js$/);
 application.load(definitionsFromContext(context));
-
 require('./mystyles.scss');

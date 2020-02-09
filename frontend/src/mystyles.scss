@@ -110,6 +110,11 @@ nav.navbar {
     width: 100%;
 }
 
+.pagination-table table tr:hover{
+    cursor: pointer;
+    background: lightcyan;
+}
+
 // Product batch
 form.filter-form{
     display: flex;

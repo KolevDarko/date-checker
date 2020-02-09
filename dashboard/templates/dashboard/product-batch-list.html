@@ -58,7 +58,7 @@
 {#    </div>#}
 {#    </form>#}
   <section class="pagination-table">
-    <table class="table">
+    <table class="table" data-controller="product-batch-table">
       <thead>
       <tr>
         <th>Id</th>
@@ -70,7 +70,7 @@
       </thead>
       <tbody>
       {% for product_batch in object_list %}
-        <tr>
+        <tr data-batch-id="{{ product_batch.id }}" data-action="click->product-batch-table#editBatch">
           <th>{{ product_batch.id }}</th>
           <th>{{ product_batch.store }}</th>
           <td>{{ product_batch.product.name }}</td>

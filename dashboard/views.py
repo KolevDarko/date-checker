@@ -83,7 +83,7 @@ class ProductBatchAddView(LoginRequiredMixin, generic.CreateView):
 
     def get(self, request, *args):
         form = ProductBatchForm(request.user.company_id)
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'form': form, 'title': 'New batch'})
 
     def post(self, request, *args):
         form = self.get_form()
@@ -105,3 +105,30 @@ class ProductBatchAddView(LoginRequiredMixin, generic.CreateView):
 
     def get_success_url(self):
         return '/dash/product-batch-add'
+
+class ProductBatchEditView(LoginRequiredMixin, generic.UpdateView):
+
+    model = ProductBatch
+    form_class = ProductBatchForm
+    template_name = 'dashboard/product-batch-form.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = ProductBatchForm(request.user.company_id, instance=self.object)
+        return render(request, self.template_name, {'form': form, 'title': 'Edit batch'})
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return render(request, self.template_name, {'form': form})
+
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
+        return form_class(self.request.user.company_id, **self.get_form_kwargs())
+
+    def get_success_url(self):
+        return '/dash/product-batch-list'

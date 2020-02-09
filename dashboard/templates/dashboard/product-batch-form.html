@@ -11,14 +11,14 @@
       <li class="is-active"><a href="#" aria-current="page">Додај пратка</a></li>
     </ul>
   </nav>
-  <div class="title">Додади нова пратка</div>
+  <div class="title">{{title}}</div>
   <div class="subtitle has-text-success">{{ message }}</div>
   <div class="subtitle has-text-danger">{{ errors }}</div>
   {{ form.non_field_errors }}
   <section data-controller="product-batch">
     <div class="columns">
       <div class="column is-6">
-        <form method="post" action="{% url 'dash-product-batch-add' %}">
+        <form method="post" action="">
           <div>
             {{ form.non_field_errors }}
           </div>
@@ -59,7 +59,7 @@
             {{ form.quantity.errors }}
             <label for="id_quantity" class="label">Quantity</label>
             <div class="control">
-              <input class="input" value="{{ form.cleaned_data.quantity }}" required name="quantity" id="id_quantity">
+              <input class="input" value="{{ form.initial.quantity }}" required name="quantity" id="id_quantity">
             </div>
           </div>
 
@@ -67,7 +67,7 @@
             {{ form.id_code.errors }}
             <label for="id_id_code" class="label">Id code</label>
             <div class="control">
-              <input class="input" value="{{ form.cleaned_data.id_code }}" required name="id_code" id="id_id_code">
+              <input class="input" value="{{ form.initial.id_code }}" required name="id_code" id="id_id_code">
             </div>
           </div>
 
@@ -75,7 +75,7 @@
             {{ form.expiration_date.errors }}
             <label for="id_expiration_date" class="label">Expiration date</label>
             <div class="control">
-              <input class="input datepicker" autocomplete="off" required value="{{ form.cleaned_data.expiration_date }}" name="expiration_date" id="id_expiration_date">
+              <input class="input datepicker" autocomplete="off" required value="{{ form.initial.expiration_date|date:'SHORT_DATE_FORMAT' }}" name="expiration_date" id="id_expiration_date">
             </div>
           </div>
 

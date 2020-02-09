@@ -7188,6 +7188,10 @@ nav.navbar {
 .pagination-table table {
   width: 100%; }
 
+.pagination-table table tr:hover {
+  cursor: pointer;
+  background: lightcyan; }
+
 form.filter-form {
   display: flex; }
 

@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 from api import views
-from dashboard.views import CompanyHomeView
 
 router = routers.DefaultRouter()
 router.register(r'stores', views.StoreViewSet)
@@ -33,5 +32,4 @@ urlpatterns = [
     url(r'dash/', include('dashboard.urls')),
     path('admin/', admin.site.urls, name='admin'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('', CompanyHomeView.as_view(), name='home'),
 ]
