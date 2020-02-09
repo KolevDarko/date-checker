@@ -111,3 +111,10 @@ nav.navbar {
 }
 
 // Product batch
+form.filter-form{
+    display: flex;
+}
+
+.filter-form div, .filter-form p{
+    margin: 0 5px;
+}

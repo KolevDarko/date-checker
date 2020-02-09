@@ -7188,5 +7188,11 @@ nav.navbar {
 .pagination-table table {
   width: 100%; }
 
+form.filter-form {
+  display: flex; }
+
+.filter-form div, .filter-form p {
+  margin: 0 5px; }
+
 
 /*# sourceMappingURL=mystyles.css.map*/

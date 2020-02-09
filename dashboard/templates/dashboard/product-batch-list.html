@@ -9,38 +9,54 @@
       <li class="is-active"><a href="#" aria-current="page">Листа на пратки</a></li>
     </ul>
   </nav>
-  <form action="" method="get">
-    {{ filterset.form.as_p }}
-    <input type="submit" value="Filter">
-  </form>
-{#  <nav class="level">#}
-{#    <div class="level-left">#}
-{#      <div class="level-item">#}
-{#        <div class="field">#}
-{#          <p class="control">#}
-{#            <label for="id_store">Store</label>#}
-{#            <select name="store" id="id_store">#}
-{#              {% for store in store_list %}#}
-{#                <option value="{{ store.id }}">{{ store }}</option>#}
-{#              {% endfor %}#}
-{#            </select>#}
-{#          </p>#}
+  <section>
+    <div class="columns">
+      <div class="column is-12">
+        <form action="" method="get" class="filter-form">
+          {{ filterset.form.as_p }}
+          <p>
+            <input type="submit" class="button is-small is-info" value="Filter">
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+{#    <form action="" method="get" class="filter-form">#}
+{#      <div class="field is-horizontal">#}
+{#        <label for="id_store" class="label field-label">Location</label>#}
+{#        <div class="control field-body is-expanded">#}
+{#          <select id="id_store" name="store" class="select is-fullwidth"#}
+{#                  data-target="product-batch.locationSelect">#}
+{#            {% for option in filterset.form.store.field.choices %}#}
+{#              {% if option.0 == filterset.form.initial.store %}#}
+{#                <option selected="selected" value="{{ option.0 }}">{{ option.1 }}</option>#}
+{#              {% else %}#}
+{#                <option value="{{ option.0 }}">{{ option.1 }}</option>#}
+{#              {% endif %}#}
+{#            {% endfor %}#}
+{#          </select>#}
 {#        </div>#}
 {#      </div>#}
-{#      <div class="level-item">#}
-{#        <div class="field">#}
-{#          <p class="control">#}
-{#            <label for="id_product">Product</label>#}
-{#            <select name="product" id="id_product" >#}
-{#              {% for product in product_list %}#}
-{#                <option value="{{ product.id }}">{{ product }}</option>#}
-{#              {% endfor %}#}
-{#            </select>#}
-{#          </p>#}
+{#      <div class="field is-horizontal">#}
+{#        <label for="id_product" class="label field-label">Product</label>#}
+{#        <div class="control is-expanded field-body">#}
+{#          <select id="id_product" name="product" class="select is-fullwidth"#}
+{#                  data-target="product-batch.productSelect">#}
+{#            {% for option in filterset.form.product.field.choices %}#}
+{#              {% if option.0 == filterset.form.initial.product %}#}
+{#                <option selected="selected" value="{{ option.0 }}">{{ option.1 }}</option>#}
+{#              {% else %}#}
+{#                <option value="{{ option.0 }}">{{ option.1 }}</option>#}
+{#              {% endif %}#}
+{#            {% endfor %}#}
+{#          </select>#}
 {#        </div>#}
 {#      </div>#}
+{#    <div>#}
+{#      <input type="submit" class="button is-info is-small" value="Filter">#}
 {#    </div>#}
-{#  </nav>#}
+{#    </form>#}
   <section class="pagination-table">
     <table class="table">
       <thead>
@@ -79,7 +95,7 @@
         <li><span class="pagination-ellipsis">&hellip;</span></li>
         {% if page_obj.has_previous %}
           <li><a class="pagination-link" href="?{% param_replace page=page_obj.previous_page_number %}"
-                 >{{ page_obj.previous_page_number }}</a></li>
+          >{{ page_obj.previous_page_number }}</a></li>
         {% endif %}
         <li><a class="pagination-link is-current" aria-label="Page {{ page_obj.number }}"
                aria-current="page">{{ page_obj.number }}</a></li>
@@ -93,4 +109,7 @@
       </ul>
     </nav>
   </section>
+{% endblock %}
+{% block js_init %}
+  <script defer src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 {% endblock %}
