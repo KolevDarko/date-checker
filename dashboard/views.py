@@ -37,7 +37,7 @@ class ProductBatchListView(LoginRequiredMixin, generic.ListView):
     filterset_class = ProductBatchFilter
     model = ProductBatch
     template_name = 'dashboard/product-batch-list.html'
-    paginate_by = 3
+    paginate_by = 30
 
     def get_queryset(self):
         queryset = ProductBatch.objects.filter(product__company_id=self.request.user.company_id).order_by('expiration_date')

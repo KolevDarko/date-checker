@@ -302,7 +302,7 @@ function (_Controller) {
 
         if ($('.datepicker').length) {
           $('.datepicker').datepicker({
-            format: 'dd-mm-yyyy',
+            format: 'yyyy-mm-dd',
             startDate: new Date(),
             autoHide: true
           });

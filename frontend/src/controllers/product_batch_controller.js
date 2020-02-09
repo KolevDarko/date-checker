@@ -11,7 +11,7 @@ export default class extends Controller {
       $(that.locationSelectTarget).select2();
       if($('.datepicker').length) {
         $('.datepicker').datepicker({
-          format: 'dd-mm-yyyy',
+          format: 'yyyy-mm-dd',
           startDate: new Date(),
           autoHide: true
         });

@@ -75,7 +75,7 @@
             {{ form.expiration_date.errors }}
             <label for="id_expiration_date" class="label">Expiration date</label>
             <div class="control">
-              <input class="input datepicker" autocomplete="off" required value="{{ form.initial.expiration_date|date:'SHORT_DATE_FORMAT' }}" name="expiration_date" id="id_expiration_date">
+              <input class="input datepicker" autocomplete="off" required value="{{ form.initial.expiration_date|date:'Y-m-d' }}" name="expiration_date" id="id_expiration_date">
             </div>
           </div>
 
