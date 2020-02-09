@@ -9,6 +9,11 @@ export default class extends Controller {
     $(document).ready(function(){
       $(that.productSelectTarget).select2();
       $(that.locationSelectTarget).select2();
+      $('.datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+        startDate: new Date(),
+        autoHide: true
+      });
     });
   }
 }

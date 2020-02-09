@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block css_init %}
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet" />
-  {% endblock %}
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" rel="stylesheet"/>
+{% endblock %}
 {% block content %}
   <nav class="breadcrumb" aria-label="breadcrumbs">
     <ul>
@@ -16,31 +17,39 @@
   {{ form.non_field_errors }}
   <section data-controller="product-batch">
     <div class="columns">
-      <div class="is-column is-8">
+      <div class="column is-6">
         <form method="post" action="{% url 'dash-product-batch-add' %}">
           <div>
             {{ form.non_field_errors }}
           </div>
           {% csrf_token %}
-          <div class="field">
+          <div class="field is-horizontal">
             {{ form.store.errors }}
-            <label for="id_store" class="label">Location</label>
-            <div class="control">
-              <select id="id_store" required name="store" class="select" data-target="product-batch.locationSelect">
+            <label for="id_store" class="field-label">Location</label>
+            <div class="control field-body is-expanded">
+              <select id="id_store" required name="store" class="select is-fullwidth" data-target="product-batch.locationSelect">
                 {% for option in form.store.field.choices %}
-                  <option value="{{ option.0 }}">{{ option.1 }}</option>
+                  {% if option.0 == form.initial.store %}
+                    <option selected="selected" value="{{ option.0 }}">{{ option.1 }}</option>
+                  {% else %}
+                    <option value="{{ option.0 }}">{{ option.1 }}</option>
+                  {% endif %}
                 {% endfor %}
               </select>
             </div>
           </div>
 
-          <div class="field">
+          <div class="field is-horizontal">
             {{ form.product.errors }}
-            <label for="id_product" class="label">Product</label>
-            <div class="control">
-              <select id="id_product" required name="product" class="select" data-target="product-batch.productSelect">
+            <label for="id_product" class="label field-label">Product</label>
+            <div class="control is-expanded field-body">
+              <select id="id_product" required name="product" class="select is-fullwidth" data-target="product-batch.productSelect">
                 {% for option in form.product.field.choices %}
-                  <option value="{{ option.0 }}">{{ option.1 }}</option>
+                  {% if option.0 == form.initial.product %}
+                    <option selected="selected" value="{{ option.0 }}">{{ option.1 }}</option>
+                  {% else %}
+                    <option value="{{ option.0 }}">{{ option.1 }}</option>
+                  {% endif %}
                 {% endfor %}
               </select>
             </div>
@@ -50,7 +59,7 @@
             {{ form.quantity.errors }}
             <label for="id_quantity" class="label">Quantity</label>
             <div class="control">
-              <input class="input" required name="quantity" id="id_quantity">
+              <input class="input" value="{{ form.cleaned_data.quantity }}" required name="quantity" id="id_quantity">
             </div>
           </div>
 
@@ -58,7 +67,7 @@
             {{ form.id_code.errors }}
             <label for="id_id_code" class="label">Id code</label>
             <div class="control">
-              <input class="input" required name="id_code" id="id_id_code">
+              <input class="input" value="{{ form.cleaned_data.id_code }}" required name="id_code" id="id_id_code">
             </div>
           </div>
 
@@ -66,7 +75,7 @@
             {{ form.expiration_date.errors }}
             <label for="id_expiration_date" class="label">Expiration date</label>
             <div class="control">
-              <input class="input" required name="expiration_date" id="id_expiration_date">
+              <input class="input datepicker" autocomplete="off" required value="{{ form.cleaned_data.expiration_date }}" name="expiration_date" id="id_expiration_date">
             </div>
           </div>
 
@@ -83,5 +92,6 @@
 {% endblock %}
 
 {% block js_init %}
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js"></script>
 {% endblock %}
