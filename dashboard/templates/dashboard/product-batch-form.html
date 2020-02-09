@@ -8,7 +8,7 @@
   <nav class="breadcrumb" aria-label="breadcrumbs">
     <ul>
       <li><a href="{% url 'home' %}">Почетна</a></li>
-      <li class="is-active"><a href="#" aria-current="page">Додај пратка</a></li>
+      <li class="is-active"><a href="#" aria-current="page">{{title}}</a></li>
     </ul>
   </nav>
   <div class="title">{{title}}</div>
@@ -25,7 +25,7 @@
           {% csrf_token %}
           <div class="field is-horizontal">
             {{ form.store.errors }}
-            <label for="id_store" class="field-label">Location</label>
+            <label for="id_store" class="label field-label">Локација</label>
             <div class="control field-body is-expanded">
               <select id="id_store" required name="store" class="select is-fullwidth" data-target="product-batch.locationSelect">
                 {% for option in form.store.field.choices %}
@@ -41,7 +41,7 @@
 
           <div class="field is-horizontal">
             {{ form.product.errors }}
-            <label for="id_product" class="label field-label">Product</label>
+            <label for="id_product" class="label field-label">Производ</label>
             <div class="control is-expanded field-body">
               <select id="id_product" required name="product" class="select is-fullwidth" data-target="product-batch.productSelect">
                 {% for option in form.product.field.choices %}

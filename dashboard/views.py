@@ -83,7 +83,7 @@ class ProductBatchAddView(LoginRequiredMixin, generic.CreateView):
 
     def get(self, request, *args):
         form = ProductBatchForm(request.user.company_id)
-        return render(request, self.template_name, {'form': form, 'title': 'New batch'})
+        return render(request, self.template_name, {'form': form, 'title': 'Додај пратка'})
 
     def post(self, request, *args):
         form = self.get_form()
@@ -115,7 +115,7 @@ class ProductBatchEditView(LoginRequiredMixin, generic.UpdateView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = ProductBatchForm(request.user.company_id, instance=self.object)
-        return render(request, self.template_name, {'form': form, 'title': 'Edit batch'})
+        return render(request, self.template_name, {'form': form, 'title': 'Промени пратка'})
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
