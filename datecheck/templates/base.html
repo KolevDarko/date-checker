@@ -4,81 +4,90 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Master Checker</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/mystyles.css' %}">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Master Checker</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/mystyles.css' %}">
   {% block css_init %}
   {% endblock %}
 </head>
 
 <body>
-    <nav class="navbar is-white">
-        <div class="container">
-            <div class="navbar-brand">
-                <a class="navbar-item brand-text" href="{% url 'home' %}">
-          {{ user.username }}
-        </a>
-                <div class="navbar-burger burger" data-target="navMenu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-            <div id="navMenu" class="navbar-menu">
-                <div class="navbar-start">
-                    <a class="navbar-item" href="{% url 'login' %}">
-            Login
-          </a>
-                    <a class="navbar-item" href="{% url 'logout' %}">
-            Logout
-          </a>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <!-- END NAV -->
-    <div class="container">
-        <div class="columns">
-            <div class="column is-3 ">
-                <aside class="menu is-hidden-mobile">
-
-                    <p class="menu-label">
-                        Предупредувања
-                    </p>
-                    <ul class="menu-list">
-                        <li><a href="{% url 'dash-warnings' %}" class="{% if request.resolver_match.url_name == "dash-warnings" %}is-active{% endif %}">Изминат рок</a></li>
-                    </ul>
-                    <p class="menu-label">
-                        Пратки
-                    </p>
-                    <ul class="menu-list">
-                        <li><a href="{% url 'dash-product-batch-list' %}" class="{% if request.resolver_match.url_name == "dash-product-batch-list" %}is-active{% endif %}">Листа на пратки</a></li>
-                        <li><a href="{% url 'dash-product-batch-add' %}" class="{% if request.resolver_match.url_name == "dash-product-batch-add" %}is-active{% endif %}">Додај нова пратка</a></li>
-                    </ul>
-                    <p class="menu-label">
-                        Производи
-                    </p>
-                    <ul class="menu-list">
-                        <li><a href="{% url 'dash-product-list' %}" class="{% if request.resolver_match.url_name == "dash-product-list" %}is-active{% endif %}">Листа на производи</a></li>
-                        <li><a href="{% url 'dash-product-add' %}" class="{% if request.resolver_match.url_name == "dash-product-add" %}is-active{% endif %}">Додај нов производ</a></li>
-                    </ul>
-                </aside>
-            </div>
-            <div class="column is-9">
-              {% block content %}
-              {% endblock %}
-            </div>
-        </div>
+<nav class="navbar is-white">
+  <div class="container">
+    <div class="navbar-brand">
+      <a class="navbar-item brand-text" href="{% url 'home' %}">
+        {{ user.username }}
+      </a>
+      <div class="navbar-burger burger" data-target="navMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
     </div>
+    <div id="navMenu" class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="{% url 'login' %}">
+          Login
+        </a>
+        <a class="navbar-item" href="{% url 'logout' %}">
+          Logout
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+<!-- END NAV -->
+<div class="container">
+  <div class="columns">
+    <div class="column is-3 ">
+      <aside class="menu is-hidden-mobile">
+
+        <p class="menu-label">
+          Предупредувања
+        </p>
+        <ul class="menu-list">
+          <li><a href="{% url 'dash-warnings' %}"
+                 class="{% if request.resolver_match.url_name == "dash-warnings" %}is-active{% endif %}">Изминат рок</a>
+          </li>
+        </ul>
+        <p class="menu-label">
+          Пратки
+        </p>
+        <ul class="menu-list">
+          <li><a href="{% url 'dash-product-batch-list' %}"
+                 class="{% if request.resolver_match.url_name == "dash-product-batch-list" %}is-active{% endif %}">Листа
+            на пратки</a></li>
+          <li><a href="{% url 'dash-product-batch-add' %}"
+                 class="{% if request.resolver_match.url_name == "dash-product-batch-add" %}is-active{% endif %}">Додај
+            нова пратка</a></li>
+        </ul>
+        <p class="menu-label">
+          Производи
+        </p>
+        <ul class="menu-list">
+          <li><a href="{% url 'dash-product-list' %}"
+                 class="{% if request.resolver_match.url_name == "dash-product-list" %}is-active{% endif %}">Листа на
+            производи</a></li>
+          <li><a href="{% url 'dash-product-add' %}"
+                 class="{% if request.resolver_match.url_name == "dash-product-add" %}is-active{% endif %}">Додај нов
+            производ</a></li>
+        </ul>
+      </aside>
+    </div>
+    <div class="column is-9">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </div>
+</div>
+<script src="{% static 'js/base.js' %}"></script>
+
 <script type="application/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="application/javascript" src="{% static 'bundles/bundle.js' %}"></script>
-    <script type="application/javascript">
-      const BASE_URL = 'http://localhost:8000';
-    </script>
 {% block js_init %}
 {% endblock %}
 </body>
