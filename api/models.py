@@ -35,6 +35,14 @@ class Product(models.Model, ModelMixin):
     def by_company(cls, company_id):
         return cls.objects.filter(company_id=company_id)
 
+class ProductReminder(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reminders')
+    days = models.IntegerField(default=7)
+
+    @classmethod
+    def create_one(cls, reminder_day, product_id):
+        return cls.objects.create(days=reminder_day, product_id=product_id)
+
 class ProductBatch(models.Model, ModelMixin):
 
     store = models.ForeignKey(Store, on_delete=models.DO_NOTHING, related_name='store_batches')

@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% block css_init %}
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet"/>
+{% endblock %}
 {% block content %}
   <nav class="breadcrumb" aria-label="breadcrumbs">
     <ul>
@@ -12,30 +14,49 @@
   <div class="subtitle has-text-success">{{ message }}</div>
   <div class="subtitle has-text-danger">{{ errors }}</div>
   {{ form.non_field_errors }}
-  <section class="form">
-    <form method="POST" action="">
-      {% csrf_token %}
-      <div class="field">
-        <label class="label">Име</label>
-        <div class="control">
-          <input class="input is-medium" type="text" name="name" required autofocus>
-        </div>
+  <section class="form" data-controller="product-add">
+    <div class="columns">
+      <div class="column is-10">
+        <form method="POST" action="">
+          {% csrf_token %}
+          <div class="field">
+            <label class="label">Име</label>
+            <div class="control">
+              <input class="input is-medium" type="text" name="name" required autofocus>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Шифра</label>
+            <div class="control">
+              <input class="input is-medium" type="text" name="id_code" required>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Цена</label>
+            <div class="control">
+              <input class="input is-medium" type="number" name="price" required>
+            </div>
+          </div>
+          <div class="field">
+            <label for="reminders" class="label">Потсетници</label>
+            <div class="control warning-select">
+              <select id="reminders" name="reminders" class="select is-fullwidth" multiple required>
+                <option value="1">1 ден</option>
+                {% for opt in reminder_options %}
+                    <option value="{{ opt }}">{{ opt }} дена</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="control">
+            <button type="submit" class="button is-link is-fullwidth has-text-weight-medium is-medium">Зачувај</button>
+          </div>
+        </form>
       </div>
-      <div class="field">
-        <label class="label">Шифра</label>
-        <div class="control">
-          <input class="input is-medium" type="text" name="id_code" required>
-        </div>
-      </div>
-      <div class="field">
-        <label class="label">Цена</label>
-        <div class="control">
-          <input class="input is-medium" type="number" name="price" required>
-        </div>
-      </div>
-      <div class="control">
-        <button type="submit" class="button is-link is-fullwidth has-text-weight-medium is-medium">Зачувај</button>
-      </div>
-    </form>
+    </div>
   </section>
+{% endblock %}
+
+{% block js_init %}
+  <script defer src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 {% endblock %}

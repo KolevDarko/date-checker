@@ -3,7 +3,7 @@ var BundleTracker = require('webpack-bundle-tracker');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  context: __dirname,
+  // context: __dirname,
 
   entry: {
     bundle: "./frontend/src/index.js"
@@ -21,6 +21,10 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '../../datecheck/static/css/mystyles.css'
     }),
+    // new webpack.ProvidePlugin({
+    //   $: path.resolve(path.join(__dirname, 'node_modules/jquery')),
+    //   jQuery: path.resolve(path.join(__dirname, 'node_modules/jquery'))
+    // })
   ],
 
   module: {

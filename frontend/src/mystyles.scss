@@ -1,5 +1,6 @@
 @charset "utf-8";
 @import "~bulma/bulma";
+@import "~bulma-tagsinput";
 
 // Layout
 
@@ -122,4 +123,10 @@ form.filter-form{
 
 .filter-form div, .filter-form p{
     margin: 0 5px;
+}
+
+// Product add
+div.warning-select .select2-container--default .select2-selection--multiple .select2-selection__choice{
+    background-color: $warning;
+    color: rgba(0, 0, 0, 0.7);
 }

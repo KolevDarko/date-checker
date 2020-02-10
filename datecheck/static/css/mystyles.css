@@ -7101,6 +7101,38 @@ label.panel-block {
   background-color: #fafafa;
   padding: 3rem 1.5rem 6rem; }
 
+@-webkit-keyframes spinAround {
+  from {
+    -webkit-transform: rotate(0);
+    transform: rotate(0); }
+  to {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg); } }
+
+@keyframes spinAround {
+  from {
+    -webkit-transform: rotate(0);
+    transform: rotate(0); }
+  to {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg); } }
+
+.tagsinput {
+  height: auto !important; }
+
+.tagsinput .control {
+  margin-bottom: 0.1em !important;
+  margin-top: 0.1em !important; }
+
+.tagsinput input {
+  border: none;
+  margin-bottom: 0.1em !important;
+  margin-top: 0.1em !important; }
+
+.tagsinput .tag.is-active {
+  background-color: #00d1b2;
+  color: #fff; }
+
 html, body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   font-size: 16px;
@@ -7197,6 +7229,10 @@ form.filter-form {
 
 .filter-form div, .filter-form p {
   margin: 0 5px; }
+
+div.warning-select .select2-container--default .select2-selection--multiple .select2-selection__choice {
+  background-color: #ffdd57;
+  color: rgba(0, 0, 0, 0.7); }
 
 
 /*# sourceMappingURL=mystyles.css.map*/

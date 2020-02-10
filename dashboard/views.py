@@ -3,23 +3,30 @@ from django.shortcuts import render
 from django.views import generic
 
 from api.filters import ProductBatchFilter
-from api.models import Product, Store, ProductBatch
+from api.models import Product, Store, ProductBatch, ProductReminder
 from dashboard.forms import ProductForm, ProductBatchForm
 
 
 class AddProductView(LoginRequiredMixin, generic.CreateView):
 
     model = Product
+    REMINDER_OPTIONS = 31
 
     def get(self, request, *args):
-        return render(request, 'dashboard/product-add.html', {})
+        return render(request, 'dashboard/product-add.html', {'reminder_options': range(2, self.REMINDER_OPTIONS)})
 
     def render_success(self):
         product_name = self.request.POST['name']
         context = {
-            'message': 'Производот {} е снимен'.format(product_name)
+            'message': 'Производот {} е снимен'.format(product_name),
+            'reminder_options': range(2, self.REMINDER_OPTIONS)
         }
         return render(self.request, 'dashboard/product-add.html', context)
+
+    def create_reminders(self, product):
+        for reminder_day in self.request.POST.getlist('reminders'):
+            ProductReminder.create_one(reminder_day, product.id)
+            print(f"Created {reminder_day}day reminder, for product {product.name} {product.id}")
 
     def post(self, request, *args):
         product_form = ProductForm(request.POST)
@@ -27,6 +34,7 @@ class AddProductView(LoginRequiredMixin, generic.CreateView):
             new_product = product_form.instance
             new_product.company_id = self.request.user.company_id
             product_form.save()
+            self.create_reminders(new_product)
             return self.render_success()
         else:
             return render(request, 'dashboard/product-add.html', {
