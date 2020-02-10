@@ -116,6 +116,14 @@ nav.navbar {
     background: lightcyan;
 }
 
+section.edit-product{
+    margin: 20px;
+}
+
+.edit-product select{
+    width: 70%;
+}
+
 // Product batch
 form.filter-form{
     display: flex;
@@ -130,3 +138,5 @@ div.warning-select .select2-container--default .select2-selection--multiple .sel
     background-color: $warning;
     color: rgba(0, 0, 0, 0.7);
 }
+
+

@@ -9,6 +9,10 @@ class ProductForm(ModelForm):
         model = Product
         fields = ['name', 'price', 'id_code']
 
+    @classmethod
+    def from_product(cls, product):
+        return cls({'name': product.name, 'price': product.price, 'id_code': product.id_code})
+
 class ProductBatchForm(forms.ModelForm):
     class Meta:
         model = ProductBatch

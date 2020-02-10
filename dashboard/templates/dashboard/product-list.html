@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block css_init %}
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet"/>
+{% endblock %}
 
 {% block content %}
   <nav class="breadcrumb" aria-label="breadcrumbs">
@@ -8,33 +11,55 @@
       <li class="is-active"><a href="#" aria-current="page">Листа на производи</a></li>
     </ul>
   </nav>
+
+  <section class="edit-product" data-controller="product-filter">
+    <div class="container">
+      <h2 class="title">Промени производ</h2>
+      <div class="field">
+        <label for="selectProduct">Избери производ:</label>
+        <div class="control">
+          <select id="selectProduct" class="select" data-target="product-filter.productSelect">
+            <option value="">-----</option>
+            {% for product in product_list %}
+              <option value="{{ product.id }}">{{ product }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <button class="button is-info" data-action="product-filter#openEdit">Промени</button>
+    </div>
+  </section>
+
   <section class="pagination-table">
-    <table class="table">
-      <thead>
-      <tr>
-        <th>Id</th>
-        <th>Шифра</th>
-        <th>Име</th>
-        <th>Цена</th>
-      </tr>
-      </thead>
-      <tbody>
-      {% for product_item in product_list %}
+    <div class="container">
+      <h2 class="title">Листа на производи</h2>
+      <table class="table">
+        <thead>
         <tr>
-          <th>{{ product_item.id }}</th>
-          <th>{{ product_item.id_code }}</th>
-          <td>{{ product_item.name }}</td>
-          <td>{{ product_item.price }}</td>
+          <th>Id</th>
+          <th>Шифра</th>
+          <th>Име</th>
+          <th>Цена</th>
         </tr>
-      {% endfor %}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+        {% for product_item in product_list %}
+          <tr>
+            <th>{{ product_item.id }}</th>
+            <th>{{ product_item.id_code }}</th>
+            <td>{{ product_item.name }}</td>
+            <td>{{ product_item.price }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </section>
 
   <section>
     <nav class="pagination is-centered" role="navigation" aria-label="pagination">
       {% if page_obj.has_previous %}
-        <a class="pagination-previous" href="?page={{ page_obj.previous_page_number }}" >Претходна</a>
+        <a class="pagination-previous" href="?page={{ page_obj.previous_page_number }}">Претходна</a>
       {% endif %}
       {% if page_obj.has_next %}
         <a class="pagination-next" href="?page={{ page_obj.next_page_number }}">Наредна</a>
@@ -43,15 +68,24 @@
         <a href="?page=1" class="pagination-link">1</a>
         <li><span class="pagination-ellipsis">&hellip;</span></li>
         {% if page_obj.has_previous %}
-          <li><a class="pagination-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Page {{page_obj.previous_page_number}}" aria-current="page">{{page_obj.previous_page_number}}</a></li>
+          <li><a class="pagination-link" href="?page={{ page_obj.previous_page_number }}"
+                 aria-label="Page {{ page_obj.previous_page_number }}"
+                 aria-current="page">{{ page_obj.previous_page_number }}</a></li>
         {% endif %}
-        <li><a class="pagination-link is-current" aria-label="Page {{page_obj.number}}" aria-current="page">{{page_obj.number}}</a></li>
-      {% if page_obj.has_next %}
-        <li><a class="pagination-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
-      {% endif %}
+        <li><a class="pagination-link is-current" aria-label="Page {{ page_obj.number }}"
+               aria-current="page">{{ page_obj.number }}</a></li>
+        {% if page_obj.has_next %}
+          <li><a class="pagination-link"
+                 href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+        {% endif %}
         <li><span class="pagination-ellipsis">&hellip;</span></li>
-        <li><a class="pagination-next" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a></li>
+        <li><a class="pagination-next"
+               href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a></li>
       </ul>
     </nav>
   </section>
+{% endblock %}
+
+{% block js_init %}
+  <script defer src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 {% endblock %}

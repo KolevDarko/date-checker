@@ -1,25 +1,27 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 from django.views import generic
 
-from api.filters import ProductBatchFilter
+from api.filters import ProductBatchFilter, ProductFilter
 from api.models import Product, Store, ProductBatch, ProductReminder
 from dashboard.forms import ProductForm, ProductBatchForm
 
+PRODUCT_REMINDERS = 31
 
 class AddProductView(LoginRequiredMixin, generic.CreateView):
 
     model = Product
-    REMINDER_OPTIONS = 31
 
     def get(self, request, *args):
-        return render(request, 'dashboard/product-add.html', {'reminder_options': range(2, self.REMINDER_OPTIONS)})
+        return render(request, 'dashboard/product-add.html', {'reminder_options': Product.reminders_range()})
 
     def render_success(self):
         product_name = self.request.POST['name']
         context = {
             'message': 'Производот {} е снимен'.format(product_name),
-            'reminder_options': range(2, self.REMINDER_OPTIONS)
+            'reminder_options': range(2, Product.REMINDER_OPTIONS)
         }
         return render(self.request, 'dashboard/product-add.html', context)
 
@@ -40,6 +42,7 @@ class AddProductView(LoginRequiredMixin, generic.CreateView):
             return render(request, 'dashboard/product-add.html', {
                 'errors': product_form.errors
             })
+
 
 class ProductBatchListView(LoginRequiredMixin, generic.ListView):
     filterset_class = ProductBatchFilter
@@ -63,13 +66,18 @@ class ProductBatchListView(LoginRequiredMixin, generic.ListView):
     #     super(ProductBatchListView, self).get(request)
 
 class ProductListView(LoginRequiredMixin, generic.ListView):
-
+    filterset_class = ProductFilter
     model = Product
     template_name = 'dashboard/product-list.html'
-    paginate_by = 3
+    paginate_by = 30
 
     def get_queryset(self):
         return Product.objects.filter(company_id=self.request.user.company_id)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductListView, self).get_context_data(object_list=None, **kwargs)
+        context['product_list'] = Product.by_company(self.request.user.company_id)
+        return context
 
 class CompanyHomeView(LoginRequiredMixin, generic.ListView):
 
@@ -140,3 +148,32 @@ class ProductBatchEditView(LoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         return '/dash/product-batch-list'
+
+class EditProductView(LoginRequiredMixin, generic.UpdateView):
+
+    model = Product
+    form_class = ProductForm
+    template_name = 'dashboard/product-add.html'
+
+    def get(self, request, *args, **kwargs):
+        product = self.get_object()
+        form = ProductForm.from_product(product)
+        existing_reminders = product.reminders.values_list('id', flat=True)
+        return render(request, self.template_name, self.create_context(form, existing_reminders))
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        new_reminder_list = request.POST.getlist('reminders')
+        if form.is_valid():
+            product = form.instance
+            product.company_id = self.request.user.company_id
+            form.save()
+            ProductReminder.update_reminders(product.id, new_reminder_list)
+            return HttpResponseRedirect(reverse('dash-product-edit', kwargs={'pk': product.id}))
+        else:
+            errors = form.errors
+            return render(request, self.template_name, self.create_context(form, new_reminder_list, errors))
+
+    def create_context(self, the_form, reminders, errors=None, message=None):
+        return {'form': the_form, 'reminder_options': Product.reminders_range(),
+         'existing_reminders': reminders, 'errors': errors, 'message': message}

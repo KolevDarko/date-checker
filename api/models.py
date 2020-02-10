@@ -23,6 +23,8 @@ class Store(models.Model, ModelMixin):
         return cls.objects.filter(company_id=company_id)
 
 class Product(models.Model, ModelMixin):
+    REMINDER_OPTIONS = 31
+
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='company_products')
     name = models.CharField(max_length=300)
     price = models.FloatField()
@@ -30,6 +32,10 @@ class Product(models.Model, ModelMixin):
 
     def __str__(self):
         return "{} ({})".format(self.name, self.id_code)
+
+    @classmethod
+    def reminders_range(cls):
+        return range(1, Product.REMINDER_OPTIONS)
 
     @classmethod
     def by_company(cls, company_id):
@@ -42,6 +48,12 @@ class ProductReminder(models.Model):
     @classmethod
     def create_one(cls, reminder_day, product_id):
         return cls.objects.create(days=reminder_day, product_id=product_id)
+
+    @classmethod
+    def update_reminders(cls, product_id, new_reminder_list):
+        cls.objects.filter(product_id=product_id).delete()
+        for reminder_days in new_reminder_list:
+            cls.create_one(reminder_days, product_id)
 
 class ProductBatch(models.Model, ModelMixin):
 

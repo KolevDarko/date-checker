@@ -1,6 +1,6 @@
 import django_filters
 
-from api.models import ProductBatch
+from api.models import ProductBatch, Product
 
 
 class ProductBatchFilter(django_filters.FilterSet):
@@ -16,3 +16,10 @@ class ProductBatchFilter(django_filters.FilterSet):
     #     data.setdefault('store', 'paperback')
     #     data.setdefault('order', '-added')
     #     super().__init__(data, *args, **kwargs)
+
+
+class ProductFilter(django_filters.FilterSet):
+
+    class Meta:
+        model = Product
+        fields = ['name', 'id_code']

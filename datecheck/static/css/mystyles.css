@@ -7224,6 +7224,12 @@ nav.navbar {
   cursor: pointer;
   background: lightcyan; }
 
+section.edit-product {
+  margin: 20px; }
+
+.edit-product select {
+  width: 70%; }
+
 form.filter-form {
   display: flex; }
 

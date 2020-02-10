@@ -11,8 +11,12 @@
     </ul>
   </nav>
   <div class="title">Додади нов производ</div>
-  <div class="subtitle has-text-success">{{ message }}</div>
-  <div class="subtitle has-text-danger">{{ errors }}</div>
+  {% if message %}
+    <div class="subtitle has-text-success">{{ message }}</div>
+  {% endif %}
+  {% if errors %}
+    <div class="subtitle has-text-danger">{{ errors }}</div>
+  {% endif %}
   {{ form.non_field_errors }}
   <section class="form" data-controller="product-add">
     <div class="columns">
@@ -22,28 +26,31 @@
           <div class="field">
             <label class="label">Име</label>
             <div class="control">
-              <input class="input is-medium" type="text" name="name" required autofocus>
+              <input class="input is-medium" type="text" name="name" value="{{ form.data.name }}" required autofocus>
             </div>
           </div>
           <div class="field">
             <label class="label">Шифра</label>
             <div class="control">
-              <input class="input is-medium" type="text" name="id_code" required>
+              <input class="input is-medium" type="text" name="id_code" value="{{ form.data.id_code }}" required>
             </div>
           </div>
           <div class="field">
             <label class="label">Цена</label>
             <div class="control">
-              <input class="input is-medium" type="number" name="price" required>
+              <input class="input is-medium" type="number" name="price" value="{{ form.data.price }}" >
             </div>
           </div>
           <div class="field">
             <label for="reminders" class="label">Потсетници</label>
             <div class="control warning-select">
               <select id="reminders" name="reminders" class="select is-fullwidth" multiple required>
-                <option value="1">1 ден</option>
                 {% for opt in reminder_options %}
-                    <option value="{{ opt }}">{{ opt }} дена</option>
+                    {% if opt in existing_reminders %}
+                      <option value="{{ opt }}" selected="selected">{{ opt }}д</option>
+                    {% else %}
+                      <option value="{{ opt }}">{{ opt }} ден</option>
+                    {% endif %}
                 {% endfor %}
               </select>
             </div>

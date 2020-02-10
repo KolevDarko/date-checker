@@ -6,7 +6,7 @@ export default class extends Controller {
 
   connect() {
     $(document).ready(function(){
-      // $("#reminders").select2();
+      $("#reminders").select2();
     });
   }
 }
