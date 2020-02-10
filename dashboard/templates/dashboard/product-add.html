@@ -47,7 +47,7 @@
               <select id="reminders" name="reminders" class="select is-fullwidth" multiple required>
                 {% for opt in reminder_options %}
                     {% if opt in existing_reminders %}
-                      <option value="{{ opt }}" selected="selected">{{ opt }}д</option>
+                      <option value="{{ opt }}" selected="selected">{{ opt }} ден</option>
                     {% else %}
                       <option value="{{ opt }}">{{ opt }} ден</option>
                     {% endif %}

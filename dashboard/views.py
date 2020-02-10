@@ -155,24 +155,23 @@ class EditProductView(LoginRequiredMixin, generic.UpdateView):
     form_class = ProductForm
     template_name = 'dashboard/product-add.html'
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, pk):
         product = self.get_object()
         form = ProductForm.from_product(product)
-        existing_reminders = product.reminders.values_list('id', flat=True)
-        return render(request, self.template_name, self.create_context(form, existing_reminders))
+        return render(request, self.template_name, self.create_context(form, product.reminder_list()))
 
     def post(self, request, *args, **kwargs):
-        form = self.get_form()
+        product = self.get_object()
+        form = ProductForm(request.POST, instance=product)
         new_reminder_list = request.POST.getlist('reminders')
+        new_int_reminders = [int(i) for i in new_reminder_list]
         if form.is_valid():
-            product = form.instance
-            product.company_id = self.request.user.company_id
-            form.save()
-            ProductReminder.update_reminders(product.id, new_reminder_list)
+            product = form.save()
+            ProductReminder.update_reminders(product.id, new_int_reminders)
             return HttpResponseRedirect(reverse('dash-product-edit', kwargs={'pk': product.id}))
         else:
             errors = form.errors
-            return render(request, self.template_name, self.create_context(form, new_reminder_list, errors))
+            return render(request, self.template_name, self.create_context(form, new_int_reminders, errors))
 
     def create_context(self, the_form, reminders, errors=None, message=None):
         return {'form': the_form, 'reminder_options': Product.reminders_range(),

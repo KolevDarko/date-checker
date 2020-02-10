@@ -41,6 +41,9 @@ class Product(models.Model, ModelMixin):
     def by_company(cls, company_id):
         return cls.objects.filter(company_id=company_id)
 
+    def reminder_list(self):
+        return self.reminders.values_list('days', flat=True)
+
 class ProductReminder(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reminders')
     days = models.IntegerField(default=7)
