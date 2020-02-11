@@ -10,6 +10,8 @@ drf-generators = "*"
 django-rest-framework = "*"
 django-webpack-loader = "*"
 django-filter = "*"
+psycopg2-binary = "*"
+
 
 [requires]
 python_version = "3.7"
