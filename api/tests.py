@@ -23,6 +23,10 @@ class ProductTests(APITestCase):
         self.assertEqual(response.data['name'], 'paracetamol')
         self.assertEqual(response.data['price'], 12)
 
+    def test_get_all_products(self):
+        response = self.client.get('/api/products')
+        print(response.data)
+
 class StoreTest(APITestCase):
 
     def test_create_store(self):

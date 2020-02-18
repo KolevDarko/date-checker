@@ -26,9 +26,6 @@ PROJECT_CONTAINER = os.path.dirname(PROJECT_ROOT)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'ibp@)dm$h&lbxa9ysj2e2zi=y4hh3kwefbbznp+y06c%pzn^i#'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
 ALLOWED_HOSTS = []
 
 WEBPACK_LOADER = {
@@ -38,7 +35,7 @@ WEBPACK_LOADER = {
     }
 }
 # Application definition
-
+SITE_ID = 1
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -46,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'webpack_loader',
     'rest_framework',
     'drf_generators',
@@ -53,6 +51,11 @@ INSTALLED_APPS = [
     'my_accounts',
     'api',
     'dashboard',
+]
+
+LOCAL_APPS = [
+    'api',
+    'dashboard'
 ]
 
 REST_FRAMEWORK = {
@@ -90,27 +93,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'datecheck.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(PROJECT_ROOT, 'db.sqlite3'),
-    }
-}
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'datechecker',
-#         'USER': 'datechecker',
-#         'PASSWORD': 'sup3rSECR3T!@#',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     },
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
