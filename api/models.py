@@ -76,11 +76,23 @@ class BatchWarning(models.Model):
     PRIORITY_WARNING = 'WARNING'
     PRIORITY_EXPIRED = 'EXPIRED'
 
-
     product_batch = models.ForeignKey(ProductBatch, on_delete=models.CASCADE, related_name='batch_warnings')
     status = models.CharField(max_length=10, default=STATUS_NEW)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     old_quantity = models.IntegerField()
-    new_quantity = models.IntegerField()
+    new_quantity = models.IntegerField(null=True, blank=True)
     priority = models.CharField(max_length=10, default=PRIORITY_WARNING)
+
+    @classmethod
+    def generate_warnings(cls):
+        all_warnings = cls.objects.raw("select pb.id as id, pb.quantity as old_quantity, pb.expiration_date as expiration_date, pb.product_id "
+                                   "from api_productbatch as pb join api_productreminder as remind on "
+                                   "pb.product_id=remind.product_id where pb.expiration_date = current_date + remind.days * INTERVAL '1 day' ")
+        for data in all_warnings:
+            batch_warning = cls(
+                product_batch_id=data.id,
+                old_quantity=data.old_quantity
+            )
+            batch_warning.save()
+            print("Warning for batch {}, product {}".format(data.id, data.product_id))
