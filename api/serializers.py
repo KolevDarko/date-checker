@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.models import Store, Product, ProductBatch
+from api.models import Store, Product, ProductBatch, BatchWarning
 
 
 class StoreSerializer(serializers.HyperlinkedModelSerializer):
@@ -17,3 +17,8 @@ class ProductBatchSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ProductBatch
         fields = '__all__'
+
+class BatchWarningSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = BatchWarning
+        fields = ['id', 'product_batch_id', 'priority', 'old_quantity', 'created_on', 'status']
