@@ -1,4 +1,4 @@
-from datecheck.settings.base import *
+from .base import *
 
 DEBUG = True
 # Database
@@ -10,4 +10,3 @@ DATABASES = {
         'NAME': os.path.join(PROJECT_ROOT, 'db.sqlite3'),
     }
 }
-

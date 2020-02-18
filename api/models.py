@@ -39,6 +39,10 @@ class Product(models.Model, ModelMixin):
     def by_company(cls, company_id):
         return cls.objects.filter(company_id=company_id)
 
+    @classmethod
+    def products_after(cls, company_id, latest_product_id):
+        return cls.objects.filter(company_id=company_id, id__gt=latest_product_id)
+
     def reminder_list(self):
         return self.reminders.values_list('days', flat=True)
 

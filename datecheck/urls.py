@@ -27,6 +27,7 @@ router.register(r'products-in-store', views.ProductBatchViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    url(r'api/sync/products/(?P<product_id>\w+)', views.ProductsSyncView.as_view(), name='sync-products'),
     path('api/', include(router.urls)),
     path('accounts/', include('django.contrib.auth.urls')),
     url(r'dash/', include('dashboard.urls')),
