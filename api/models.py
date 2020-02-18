@@ -23,7 +23,6 @@ class Store(models.Model, ModelMixin):
 
 class Product(models.Model, ModelMixin):
     REMINDER_OPTIONS = 31
-
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='company_products')
     name = models.CharField(max_length=300)
     price = models.FloatField()

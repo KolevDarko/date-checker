@@ -1,4 +1,4 @@
-from .base import *
+from datecheck.settings.base import *
 
 DEBUG = True
 # Database
