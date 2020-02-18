@@ -27,9 +27,21 @@ class ProductBatchViewSet(viewsets.ModelViewSet):
     queryset = ProductBatch.objects.all()
     serializer_class = ProductBatchSerializer
 
+    def get_serializer(self, *args, **kwargs):
+        kwargs['partial'] = True
+        return super(ProductBatchViewSet, self).get_serializer(*args, **kwargs)
+
+
 class BatchWarningViewSet(viewsets.ModelViewSet):
     queryset = BatchWarning.objects.all()
     serializer_class = BatchWarningSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        kwargs['partial'] = True
+        return super(BatchWarningViewSet, self).get_serializer(*args, **kwargs)
+
+    def get_queryset(self):
+        pass
 
 class ProductsSyncView(views.APIView):
 

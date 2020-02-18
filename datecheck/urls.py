@@ -20,7 +20,7 @@ from rest_framework import routers
 from api import views
 
 router = routers.DefaultRouter()
-# router.register(r'stores', views.StoreViewSet)
+router.register(r'stores', views.StoreViewSet)
 router.register(r'products', views.ProductViewSet)
 router.register(r'product-batches', views.ProductBatchViewSet)
 router.register(r'batch-warnings', views.BatchWarningViewSet)
