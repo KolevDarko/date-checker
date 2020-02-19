@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'webpack_loader',
     'rest_framework',
+    'rest_framework.authtoken',
     'drf_generators',
     'django_filters',
     'my_accounts',
@@ -60,7 +61,13 @@ LOCAL_APPS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 5
+    'PAGE_SIZE': 5,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication'
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
 }
 
 MIDDLEWARE = [
