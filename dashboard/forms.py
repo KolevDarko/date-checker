@@ -22,3 +22,7 @@ class ProductBatchForm(forms.ModelForm):
         super(ProductBatchForm, self).__init__(*args, **kwargs)
         self.fields['product'].queryset = Product.objects.filter(company_id=company_id)
         self.fields['store'].queryset = Store.objects.filter(company_id=company_id)
+
+    def save(self, commit=True):
+        self.instance.original_quantity = self.instance.quantity
+        super(ProductBatchForm, self).save(commit=True)

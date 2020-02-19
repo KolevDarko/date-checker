@@ -1,3 +1,4 @@
+from dateutil.parser import parse
 from django.db import models
 
 class ModelMixin():
@@ -64,13 +65,51 @@ class ProductBatch(models.Model, ModelMixin):
 
     store = models.ForeignKey(Store, on_delete=models.DO_NOTHING, related_name='store_batches')
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING, related_name='product_batches')
+    original_quantity = models.IntegerField()
     quantity = models.IntegerField()
     expiration_date = models.DateField()
     id_code = models.CharField(max_length=100)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
-class BatchWarning(models.Model):
+    @classmethod
+    def create_new(cls, data, store_id):
+        return cls.objects.create(
+            store_id=store_id,
+            product_id=data.product_id,
+            original_quantity=data.quantity,
+            quantity=data.quantity,
+            expiration_data=parse(data.expiration_date),
+            id_code=data.id_code
+        )
+
+    def update_quantity(self, new_quantity):
+        self.quantity = new_quantity
+        self.save()
+
+class ProductBatchArchive(models.Model, ModelMixin):
+    store = models.ForeignKey(Store, on_delete=models.DO_NOTHING, related_name='store_batches')
+    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING, related_name='product_batches')
+    batch_id = models.IntegerField()
+    original_quantity = models.IntegerField()
+    leftover_quantity = models.IntegerField()
+    expiration_date = models.DateField()
+    id_code = models.CharField(max_length=100)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    @classmethod
+    def archive_batch(cls, batch):
+        archive = cls()
+        archive.store_id = batch.store_id
+        archive.product_id = batch.product_id
+        archive.batch_id = batch.id
+        archive.original_quantity = batch.original_quantity
+        archive.leftover_quantity = batch.quantity
+        archive.expiration_date = batch.expiration_date
+        archive.id_code = batch.id_code
+        archive.save()
+
+class BatchWarning(models.Model, ModelMixin):
 
     STATUS_NEW = 'NEW'
     STATUS_CHECKED = 'CHECKED'
@@ -78,7 +117,7 @@ class BatchWarning(models.Model):
     PRIORITY_WARNING = 'WARNING'
     PRIORITY_EXPIRED = 'EXPIRED'
 
-    product_batch = models.ForeignKey(ProductBatch, on_delete=models.CASCADE, related_name='batch_warnings')
+    product_batch = models.ForeignKey(ProductBatch, on_delete=models.DO_NOTHING, related_name='batch_warnings')
     status = models.CharField(max_length=10, default=STATUS_NEW)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
@@ -98,3 +137,16 @@ class BatchWarning(models.Model):
             )
             batch_warning.save()
             print("Warning for batch {}, product {}".format(data.id, data.product_id))
+
+    @classmethod
+    def silence_warnings(cls, batch_id):
+        cls.objects.filter(product_batch_id=batch_id).update(status=cls.STATUS_CHECKED)
+
+    @classmethod
+    def get_active(cls, store_id):
+        return cls.objects.filter(product_batch__store_id=store_id, status=cls.STATUS_NEW)
+
+    def mark_checked(self, new_quantity):
+        self.new_quantity = new_quantity
+        self.status = self.STATUS_CHECKED
+        self.save()

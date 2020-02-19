@@ -11,7 +11,7 @@ django-rest-framework = "*"
 django-webpack-loader = "*"
 django-filter = "*"
 psycopg2-binary = "*"
-
+python-dateutil = "*"
 
 [requires]
 python_version = "3.7"

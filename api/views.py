@@ -1,7 +1,9 @@
+from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets, views
 from rest_framework.response import Response
+from rest_framework.utils import json
 
-from api.models import BatchWarning
+from api.models import BatchWarning, ProductBatchArchive
 from api.serializers import *
 
 
@@ -50,9 +52,50 @@ class BatchWarningViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return BatchWarning.objects.filter(product_batch__product__company_id=self.request.user.company_id)
 
+class ActiveBatchWarningsView(views.APIView):
+
+    def get(self, request):
+        # todo test
+        BatchWarning.get_active(request.user.store_id)
+
 class ProductsSyncView(views.APIView):
 
     def get(self, request, product_id):
         new_products = Product.products_after(request.user.company_id, int(product_id))
         serializer = ProductSerializer(new_products, many=True)
         return Response(serializer.data)
+
+class ProductBatchSyncView(views.APIView):
+    """
+     Uploads new product batches and returns ids for them
+    """
+    def post(self, request):
+        # todo test
+        all_data = json.loads(request.body.decode())
+        results = []
+        for batch_data in all_data:
+            batch = ProductBatch.create_new(batch_data, request.user.store_id)
+            results.append(batch.id)
+        return JsonResponse({"ids": results})
+
+class ProductBatchUpdate(views.APIView):
+    """
+    Updates quantity of product batch and silences warnings
+    """
+    def update_warning(self, batch_data):
+        batch_warning = BatchWarning.get_by_id(batch_data.warning_id)
+        batch_warning.mark_checked(batch_data.quantity)
+        BatchWarning.silence_warnings(batch_data.batch_id)
+
+    def update_batch(self, batch_data):
+        batch = ProductBatch.get_by_id(batch_data.batch_id)
+        batch.update_quantity(batch_data.quantity)
+        if batch_data.quantity == 0:
+            ProductBatchArchive.archive_batch(batch)
+
+    def post(self, request):
+        # todo test
+        batch_data = json.loads(request.body)
+        self.update_batch(batch_data)
+        self.update_warning(batch_data)
+        return HttpResponse()
