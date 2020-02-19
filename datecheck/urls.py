@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 from api import views
+from rest_framework.authtoken import views as auth_views
 
 router = routers.DefaultRouter()
 router.register(r'stores', views.StoreViewSet)
@@ -28,6 +29,7 @@ router.register(r'batch-warnings', views.BatchWarningViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    url(r'api-token-auth', auth_views.obtain_auth_token),
     url(r'api/sync/products/(?P<product_id>\w+)', views.ProductsSyncView.as_view(), name='sync-products'),
     path('api/', include(router.urls)),
     path('accounts/', include('django.contrib.auth.urls')),
