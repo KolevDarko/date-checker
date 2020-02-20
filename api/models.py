@@ -1,5 +1,6 @@
 from dateutil.parser import parse
 from django.db import models
+import datetime
 
 class ModelMixin():
 
@@ -88,8 +89,8 @@ class ProductBatch(models.Model, ModelMixin):
         self.save()
 
 class ProductBatchArchive(models.Model, ModelMixin):
-    store = models.ForeignKey(Store, on_delete=models.DO_NOTHING, related_name='store_batches')
-    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING, related_name='product_batches')
+    store = models.ForeignKey(Store, on_delete=models.DO_NOTHING, related_name='archived_store_batches')
+    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING, related_name='archived_product_batches')
     batch_id = models.IntegerField()
     original_quantity = models.IntegerField()
     leftover_quantity = models.IntegerField()
@@ -126,10 +127,16 @@ class BatchWarning(models.Model, ModelMixin):
     priority = models.CharField(max_length=10, default=PRIORITY_WARNING)
 
     @classmethod
-    def generate_warnings(cls):
-        all_warnings = cls.objects.raw("select pb.id as id, pb.quantity as old_quantity, pb.expiration_date as expiration_date, pb.product_id "
-                                   "from api_productbatch as pb join api_productreminder as remind on "
-                                   "pb.product_id=remind.product_id where pb.expiration_date = current_date + remind.days * INTERVAL '1 day' ")
+    def generate_all_warnings(cls):
+        cls.generate_normal_warnings()
+        cls.generate_expired_warnings()
+
+    @classmethod
+    def generate_normal_warnings(cls):
+        all_warnings = cls.objects.raw(
+            "select pb.id as id, pb.quantity as old_quantity, pb.expiration_date as expiration_date, pb.product_id "
+            "from api_productbatch as pb join api_productreminder as remind on "
+            "pb.product_id=remind.product_id where pb.expiration_date = current_date + remind.days * INTERVAL '1 day' ")
         for data in all_warnings:
             batch_warning = cls(
                 product_batch_id=data.id,
@@ -139,12 +146,32 @@ class BatchWarning(models.Model, ModelMixin):
             print("Warning for batch {}, product {}".format(data.id, data.product_id))
 
     @classmethod
+    def generate_expired_warnings(cls):
+        expired_batches = ProductBatch.objects.filter(expiration_date__lt=datetime.datetime.utcnow())
+        for batch in expired_batches:
+            batch_warning = cls(product_batch_id=batch.id, old_quantity=batch.quantity, priority=cls.PRIORITY_EXPIRED)
+            batch_warning.save()
+            print("Expired warning for batch {}, product {}".format(batch.id, batch.product_id))
+
+    @classmethod
     def silence_warnings(cls, batch_id):
         cls.objects.filter(product_batch_id=batch_id).update(status=cls.STATUS_CHECKED)
 
     @classmethod
     def get_active(cls, store_id):
-        return cls.objects.filter(product_batch__store_id=store_id, status=cls.STATUS_NEW)
+        active_warnings = cls.objects.filter(product_batch__store_id=store_id, status=cls.STATUS_NEW).select_related('product_batch', 'product_batch__product').order_by('product_batch__expiration_date')
+        results = []
+        for warning in active_warnings:
+            results.append({
+                "id": warning.id,
+                "product_batch_id": warning.product_batch_id,
+                "expiration_date": warning.product_batch.expiration_date,
+                "product_id": warning.product_batch.product_id,
+                "product_name": warning.product_batch.product.name,
+                "quantity": warning.product_batch.quantity,
+                "priority": warning.priority
+            })
+        return results
 
     def mark_checked(self, new_quantity):
         self.new_quantity = new_quantity

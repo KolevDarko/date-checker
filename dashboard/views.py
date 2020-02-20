@@ -89,6 +89,7 @@ class CompanyHomeView(LoginRequiredMixin, generic.ListView):
 class ExpirationWarning(LoginRequiredMixin, generic.ListView):
 
     def get(self, *args):
+        # todo finish, show warnings in table sorted decreasing
         pass
 
 class ProductBatchAddView(LoginRequiredMixin, generic.CreateView):

@@ -5,4 +5,4 @@ class Command(BaseCommand):
     help = "Create product reminders for expiring batches"
 
     def handle(self, *args, **options):
-        BatchWarning.generate_warnings()
+        BatchWarning.generate_all_warnings()

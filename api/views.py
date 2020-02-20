@@ -55,8 +55,8 @@ class BatchWarningViewSet(viewsets.ModelViewSet):
 class ActiveBatchWarningsView(views.APIView):
 
     def get(self, request):
-        # todo test
-        BatchWarning.get_active(request.user.store_id)
+        active_warnings = BatchWarning.get_active(request.user.store_id)
+        return Response(active_warnings)
 
 class ProductsSyncView(views.APIView):
 
