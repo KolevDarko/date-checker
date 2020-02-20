@@ -1,4 +1,4 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from rest_framework import viewsets, views
 from rest_framework.response import Response
 from rest_framework.utils import json
@@ -17,6 +17,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Product.objects.filter(company_id=self.request.user.company_id)
 
+
 class StoreViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -27,19 +28,18 @@ class StoreViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Store.objects.filter(company_id=self.request.user.company_id)
 
+
 class ProductBatchViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
     queryset = ProductBatch.objects.all()
     serializer_class = ProductBatchSerializer
 
-    def get_serializer(self, *args, **kwargs):
-        kwargs['partial'] = True
-        return super(ProductBatchViewSet, self).get_serializer(*args, **kwargs)
+    # def get_serializer(self, *args, **kwargs):
+    #     kwargs['partial'] = True
+    #     return super(ProductBatchViewSet, self).get_serializer(*args, **kwargs)
 
     def get_queryset(self):
         return ProductBatch.objects.filter(product__company_id=self.request.user.company_id)
+
 
 class BatchWarningViewSet(viewsets.ModelViewSet):
     queryset = BatchWarning.objects.all()
@@ -52,11 +52,13 @@ class BatchWarningViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return BatchWarning.objects.filter(product_batch__product__company_id=self.request.user.company_id)
 
+
 class ActiveBatchWarningsView(views.APIView):
 
     def get(self, request):
         active_warnings = BatchWarning.get_active(request.user.store_id)
         return Response(active_warnings)
+
 
 class ProductsSyncView(views.APIView):
 
@@ -65,23 +67,26 @@ class ProductsSyncView(views.APIView):
         serializer = ProductSerializer(new_products, many=True)
         return Response(serializer.data)
 
+
 class ProductBatchSyncView(views.APIView):
     """
      Uploads new product batches and returns ids for them
     """
+
     def post(self, request):
         # todo test
-        all_data = json.loads(request.body.decode())
-        results = []
-        for batch_data in all_data:
-            batch = ProductBatch.create_new(batch_data, request.user.store_id)
-            results.append(batch.id)
-        return JsonResponse({"ids": results})
+        serialized = ProductBatchSerializer(data=request.data, many=True)
+        if serialized.is_valid():
+            serialized.save()
+            return Response(serialized.data)
+        else:
+            return JsonResponse(status=400, data={'errors': serialized.errors})
 
 class ProductBatchUpdate(views.APIView):
     """
     Updates quantity of product batch and silences warnings
     """
+
     def update_warning(self, batch_data):
         batch_warning = BatchWarning.get_by_id(batch_data.warning_id)
         batch_warning.mark_checked(batch_data.quantity)

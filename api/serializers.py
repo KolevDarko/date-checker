@@ -8,15 +8,18 @@ class StoreSerializer(serializers.HyperlinkedModelSerializer):
         model = Store
         fields = '__all__'
 
+
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Product
         fields = ['name', 'price', 'id_code', 'id']
 
-class ProductBatchSerializer(serializers.HyperlinkedModelSerializer):
+
+class ProductBatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductBatch
         fields = '__all__'
+
 
 class BatchWarningSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

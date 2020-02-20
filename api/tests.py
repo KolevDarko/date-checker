@@ -2,10 +2,11 @@ import datetime
 
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
 from rest_framework.utils import json
 
 from api.models import Product, ProductBatch, Company, Store
+from my_accounts.models import User
 
 
 class ProductTests(APITestCase):
@@ -51,10 +52,15 @@ class ProductBatchTests(APITestCase):
         self.batch_1 = ProductBatch.objects.create(
             product=self.product_1,
             quantity=800,
+            original_quantity=800,
             expiration_date=expiration_1,
             id_code='batch-1',
             store=self.store_1
         )
+        self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        self.user.save()
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
 
     def test_update_batch_quantity_and_check_warnings(self):
         batch_url = reverse('productbatch-detail', args=[self.batch_1.id])
@@ -66,3 +72,30 @@ class ProductBatchTests(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.batch_1.refresh_from_db()
         self.assertEqual(self.batch_1.quantity, new_quantity)
+
+    def test_sync_batches_to_server(self):
+        batches_url = reverse('sync-batches')
+        expiration_date = "2020-02-20"
+        data = [
+            {
+                'product': 1,
+                'store': 1,
+                'quantity': 50,
+                'original_quantity': 50,
+                'expiration_date': expiration_date,
+                'id_code': 'AS123'
+            },
+            {
+                'product': 1,
+                'store': 1,
+                'quantity': 30,
+                'original_quantity': 30,
+                'expiration_date': expiration_date,
+                'id_code': 'AS101'
+            }
+        ]
+        response = self.client.post(batches_url, content_type='application/json', data=json.dumps(data))
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data[0]['quantity'], 50)
+        self.assertEqual(response.data[1]['quantity'], 30)
+
