@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.utils import json
 
-from api.models import Product, ProductBatch, Company, Store
+from api.models import Product, ProductBatch, Company, Store, BatchWarning
 from my_accounts.models import User
 
 
@@ -36,6 +36,7 @@ class ProductTests(APITestCase):
     def test_get_all_products(self):
         response = self.client.get('/api/products/')
         print(response.data)
+
 
 class ProductBatchTests(APITestCase):
 
@@ -95,7 +96,50 @@ class ProductBatchTests(APITestCase):
             }
         ]
         response = self.client.post(batches_url, content_type='application/json', data=json.dumps(data))
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[0]['quantity'], 50)
         self.assertEqual(response.data[1]['quantity'], 30)
+
+
+class BatchWarningTests(APITestCase):
+
+    def setUp(self) -> None:
+        self.company = Company.objects.create(name='Fit Food')
+        self.store_1 = Store.objects.create(company=self.company, name='Kocani')
+        self.product_1 = Product.objects.create(
+            company=self.company,
+            name="Toblerone",
+            price=120,
+            id_code='ASDF123'
+        )
+        expiration_1 = datetime.datetime.now() + datetime.timedelta(days=7)
+        self.batch_1 = ProductBatch.objects.create(
+            product=self.product_1,
+            quantity=800,
+            original_quantity=800,
+            expiration_date=expiration_1,
+            id_code='batch-1',
+            store=self.store_1
+        )
+        self.warning_1 = BatchWarning.objects.create(
+            product_batch=self.batch_1,
+            old_quantity=self.batch_1.quantity
+        )
+        self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        self.user.save()
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+
+    def test_update_batch_and_silence_warnings(self):
+        batches_url = reverse('sync-batches')
+        data = {
+            'id': self.batch_1.id,
+            'quantity': 0
+        }
+        response = self.client.put(batches_url, content_type='application/json', data=json.dumps(data))
+        self.assertEqual(response.status_code, 200)
+        self.warning_1.refresh_from_db()
+        self.assertEqual(self.warning_1.new_quantity, 0)
+        self.assertEqual(self.warning_1.product_batch, None)
+        self.assertEqual(self.warning_1.product_batch_archive_id, 1)
 

@@ -2,14 +2,17 @@ from dateutil.parser import parse
 from django.db import models
 import datetime
 
+
 class ModelMixin():
 
     @classmethod
     def get_by_id(cls, id):
         return cls.objects.get(pk=id)
 
+
 class Company(models.Model):
     name = models.CharField(max_length=200)
+
 
 class Store(models.Model, ModelMixin):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='company_stores')
@@ -22,6 +25,7 @@ class Store(models.Model, ModelMixin):
     @classmethod
     def by_company(cls, company_id):
         return cls.objects.filter(company_id=company_id)
+
 
 class Product(models.Model, ModelMixin):
     REMINDER_OPTIONS = 31
@@ -48,6 +52,7 @@ class Product(models.Model, ModelMixin):
     def reminder_list(self):
         return self.reminders.values_list('days', flat=True)
 
+
 class ProductReminder(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reminders')
     days = models.IntegerField(default=7)
@@ -62,8 +67,8 @@ class ProductReminder(models.Model):
         for reminder_days in new_reminder_list:
             cls.create_one(reminder_days, product_id)
 
-class ProductBatch(models.Model, ModelMixin):
 
+class ProductBatch(models.Model, ModelMixin):
     store = models.ForeignKey(Store, on_delete=models.DO_NOTHING, related_name='store_batches')
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING, related_name='product_batches')
     original_quantity = models.IntegerField()
@@ -88,6 +93,7 @@ class ProductBatch(models.Model, ModelMixin):
         self.quantity = new_quantity
         self.save()
 
+
 class ProductBatchArchive(models.Model, ModelMixin):
     store = models.ForeignKey(Store, on_delete=models.DO_NOTHING, related_name='archived_store_batches')
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING, related_name='archived_product_batches')
@@ -99,7 +105,7 @@ class ProductBatchArchive(models.Model, ModelMixin):
     created_on = models.DateTimeField(auto_now_add=True)
 
     @classmethod
-    def archive_batch(cls, batch):
+    def create_batch_archive(cls, batch):
         archive = cls()
         archive.store_id = batch.store_id
         archive.product_id = batch.product_id
@@ -109,16 +115,20 @@ class ProductBatchArchive(models.Model, ModelMixin):
         archive.expiration_date = batch.expiration_date
         archive.id_code = batch.id_code
         archive.save()
+        return archive
+
 
 class BatchWarning(models.Model, ModelMixin):
-
     STATUS_NEW = 'NEW'
     STATUS_CHECKED = 'CHECKED'
 
     PRIORITY_WARNING = 'WARNING'
     PRIORITY_EXPIRED = 'EXPIRED'
 
-    product_batch = models.ForeignKey(ProductBatch, on_delete=models.DO_NOTHING, related_name='batch_warnings')
+    product_batch = models.ForeignKey(ProductBatch, on_delete=models.DO_NOTHING, related_name='batch_warnings',
+                                      null=True, blank=True)
+    product_batch_archive = models.ForeignKey(ProductBatchArchive, on_delete=models.DO_NOTHING,
+                                              related_name='batch_warnings', null=True, blank=True)
     status = models.CharField(max_length=10, default=STATUS_NEW)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
@@ -154,12 +164,23 @@ class BatchWarning(models.Model, ModelMixin):
             print("Expired warning for batch {}, product {}".format(batch.id, batch.product_id))
 
     @classmethod
-    def silence_warnings(cls, batch_id):
-        cls.objects.filter(product_batch_id=batch_id).update(status=cls.STATUS_CHECKED)
+    def silence_warnings(cls, batch_id, new_quantity):
+        cls.objects.filter(product_batch_id=batch_id, status=cls.STATUS_NEW).update(
+            status=cls.STATUS_CHECKED,
+            new_quantity=new_quantity
+        )
+
+    @classmethod
+    def archive_warnings(cls, batch_id, batch_archive_id):
+        cls.objects.filter(product_batch_id=batch_id).update(
+            product_batch=None,
+            product_batch_archive=batch_archive_id
+        )
 
     @classmethod
     def get_active(cls, store_id):
-        active_warnings = cls.objects.filter(product_batch__store_id=store_id, status=cls.STATUS_NEW).select_related('product_batch', 'product_batch__product').order_by('product_batch__expiration_date')
+        active_warnings = cls.objects.filter(product_batch__store_id=store_id, status=cls.STATUS_NEW).select_related(
+            'product_batch', 'product_batch__product').order_by('product_batch__expiration_date')
         results = []
         for warning in active_warnings:
             results.append({

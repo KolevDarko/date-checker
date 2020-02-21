@@ -74,7 +74,6 @@ class ProductBatchSyncView(views.APIView):
     """
 
     def post(self, request):
-        # todo test
         serialized = ProductBatchSerializer(data=request.data, many=True)
         if serialized.is_valid():
             serialized.save()
@@ -82,25 +81,18 @@ class ProductBatchSyncView(views.APIView):
         else:
             return JsonResponse(status=400, data={'errors': serialized.errors})
 
-class ProductBatchUpdate(views.APIView):
-    """
-    Updates quantity of product batch and silences warnings
-    """
-
-    def update_warning(self, batch_data):
-        batch_warning = BatchWarning.get_by_id(batch_data.warning_id)
-        batch_warning.mark_checked(batch_data.quantity)
-        BatchWarning.silence_warnings(batch_data.batch_id)
+    def put(self, request):
+        batch_data = json.loads(request.body)
+        self.update_warnings(batch_data)
+        self.update_batch(batch_data)
+        return Response()
 
     def update_batch(self, batch_data):
-        batch = ProductBatch.get_by_id(batch_data.batch_id)
-        batch.update_quantity(batch_data.quantity)
-        if batch_data.quantity == 0:
-            ProductBatchArchive.archive_batch(batch)
+        batch = ProductBatch.get_by_id(batch_data['id'])
+        batch.update_quantity(batch_data['quantity'])
+        if batch_data['quantity'] == 0:
+            batch_archive = ProductBatchArchive.create_batch_archive(batch)
+            BatchWarning.archive_warnings(batch.id, batch_archive.id)
 
-    def post(self, request):
-        # todo test
-        batch_data = json.loads(request.body)
-        self.update_batch(batch_data)
-        self.update_warning(batch_data)
-        return HttpResponse()
+    def update_warnings(self, batch_data):
+        BatchWarning.silence_warnings(batch_data['id'], batch_data['quantity'])

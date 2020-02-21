@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'api/warnings/active/', views.ActiveBatchWarningsView.as_view(), name='active-warnings'),
     url(r'api/sync/products/(?P<product_id>\w+)', views.ProductsSyncView.as_view(), name='sync-products'),
     url(r'api/sync/batches/', views.ProductBatchSyncView.as_view(), name='sync-batches'),
+    # url(r'api/sync/batches/', views.ProductBatchUpdateView.as_view(), name='update-batch'),
     path('api/', include(router.urls)),
     path('accounts/', include('django.contrib.auth.urls')),
     url(r'dash/', include('dashboard.urls')),
