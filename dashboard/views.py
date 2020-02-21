@@ -4,14 +4,14 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views import generic
 
-from api.filters import ProductBatchFilter, ProductFilter
-from api.models import Product, Store, ProductBatch, ProductReminder
+from api.filters import ProductBatchFilter, ProductFilter, BatchWarningFilter
+from api.models import Product, Store, ProductBatch, ProductReminder, BatchWarning
 from dashboard.forms import ProductForm, ProductBatchForm
 
 PRODUCT_REMINDERS = 31
 
-class AddProductView(LoginRequiredMixin, generic.CreateView):
 
+class AddProductView(LoginRequiredMixin, generic.CreateView):
     model = Product
 
     def get(self, request, *args):
@@ -51,7 +51,8 @@ class ProductBatchListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 30
 
     def get_queryset(self):
-        queryset = ProductBatch.objects.filter(product__company_id=self.request.user.company_id).order_by('expiration_date')
+        queryset = ProductBatch.objects.filter(product__company_id=self.request.user.company_id).order_by(
+            'expiration_date')
         self.filterset = self.filterset_class(self.request.GET, queryset=queryset)
         return self.filterset.qs.distinct()
 
@@ -62,8 +63,6 @@ class ProductBatchListView(LoginRequiredMixin, generic.ListView):
         context['filterset'] = self.filterset
         return context
 
-    # def get(self, request, *args, **kwargs):
-    #     super(ProductBatchListView, self).get(request)
 
 class ProductListView(LoginRequiredMixin, generic.ListView):
     filterset_class = ProductFilter
@@ -79,21 +78,35 @@ class ProductListView(LoginRequiredMixin, generic.ListView):
         context['product_list'] = Product.by_company(self.request.user.company_id)
         return context
 
-class CompanyHomeView(LoginRequiredMixin, generic.ListView):
 
+class CompanyHomeView(LoginRequiredMixin, generic.ListView):
     model = Store
 
     def get(self, request, *args, **kwargs):
         return render(request, 'dashboard/home.html', {})
 
-class ExpirationWarning(LoginRequiredMixin, generic.ListView):
 
-    def get(self, *args):
-        # todo finish, show warnings in table sorted decreasing
-        pass
+class BatchWarningListView(LoginRequiredMixin, generic.ListView):
+    filterset_class = BatchWarningFilter
+    model = BatchWarning
+    template_name = 'dashboard/batch-warning-list.html'
+    paginate_by = 30
+
+    def get_queryset(self):
+        queryset = BatchWarning.objects.filter(status=BatchWarning.STATUS_NEW, product_batch_id__gt=0,
+            product_batch__product__company_id=self.request.user.company_id).order_by('product_batch__expiration_date')
+        self.filterset = self.filterset_class(self.request.GET, queryset=queryset)
+        return self.filterset.qs.distinct()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(BatchWarningListView, self).get_context_data(object_list=None, **kwargs)
+        context['store_list'] = Store.by_company(self.request.user.company_id)
+        context['product_list'] = Product.by_company(self.request.user.company_id)
+        context['filterset'] = self.filterset
+        return context
+
 
 class ProductBatchAddView(LoginRequiredMixin, generic.CreateView):
-
     model = ProductBatch
     form_class = ProductBatchForm
     template_name = 'dashboard/product-batch-form.html'
@@ -107,7 +120,8 @@ class ProductBatchAddView(LoginRequiredMixin, generic.CreateView):
         if form.is_valid():
             form.save()
             new_form = ProductBatchForm(self.request.user.company_id, initial={'store': form.cleaned_data['store'].id,
-                                                                               'product': form.cleaned_data['product'].id})
+                                                                               'product': form.cleaned_data[
+                                                                                   'product'].id})
             return render(request, self.template_name, {'form': new_form})
         else:
             return render(request, self.template_name, {'form': form})
@@ -123,8 +137,8 @@ class ProductBatchAddView(LoginRequiredMixin, generic.CreateView):
     def get_success_url(self):
         return '/dash/product-batch-add'
 
-class ProductBatchEditView(LoginRequiredMixin, generic.UpdateView):
 
+class ProductBatchEditView(LoginRequiredMixin, generic.UpdateView):
     model = ProductBatch
     form_class = ProductBatchForm
     template_name = 'dashboard/product-batch-form.html'
@@ -150,8 +164,8 @@ class ProductBatchEditView(LoginRequiredMixin, generic.UpdateView):
     def get_success_url(self):
         return '/dash/product-batch-list'
 
-class EditProductView(LoginRequiredMixin, generic.UpdateView):
 
+class EditProductView(LoginRequiredMixin, generic.UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'dashboard/product-add.html'
@@ -176,4 +190,4 @@ class EditProductView(LoginRequiredMixin, generic.UpdateView):
 
     def create_context(self, the_form, reminders, errors=None, message=None):
         return {'form': the_form, 'reminder_options': Product.reminders_range(),
-         'existing_reminders': reminders, 'errors': errors, 'message': message}
+                'existing_reminders': reminders, 'errors': errors, 'message': message}
