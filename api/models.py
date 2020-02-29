@@ -177,6 +177,10 @@ class BatchWarning(models.Model, ModelMixin):
             product_batch_archive=batch_archive_id
         )
 
+    @staticmethod
+    def calc_days_left(expiration_date):
+        return (expiration_date - datetime.datetime.utcnow().date()).days
+
     @classmethod
     def get_active(cls, store_id):
         active_warnings = cls.objects.filter(product_batch__store_id=store_id, status=cls.STATUS_NEW).select_related(
@@ -187,6 +191,7 @@ class BatchWarning(models.Model, ModelMixin):
                 "id": warning.id,
                 "product_batch_id": warning.product_batch_id,
                 "expiration_date": warning.product_batch.expiration_date,
+                "days_left": cls.calc_days_left(warning.product_batch.expiration_date),
                 "product_id": warning.product_batch.product_id,
                 "product_name": warning.product_batch.product.name,
                 "quantity": warning.product_batch.quantity,
