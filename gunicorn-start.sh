@@ -1,5 +1,5 @@
 #!/bin/bash
-NAME="Date Checker"
+NAME="Date-Checker"
 DJANGODIR=/home/darko/date-checker/
 SOCKFILE=/home/darko/date-checker/run/gunicorn.sock   # we will communicate using this unix socket
 USER=darko                                      # The user to run as

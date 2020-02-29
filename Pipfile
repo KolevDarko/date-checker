@@ -12,6 +12,7 @@ django-webpack-loader = "*"
 django-filter = "*"
 psycopg2-binary = "*"
 python-dateutil = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.7"
