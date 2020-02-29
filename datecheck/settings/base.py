@@ -26,7 +26,7 @@ PROJECT_CONTAINER = os.path.dirname(PROJECT_ROOT)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'ibp@)dm$h&lbxa9ysj2e2zi=y4hh3kwefbbznp+y06c%pzn^i#'
 
-ALLOWED_HOSTS = ['localhost', 'datecheck.lifehqapp.com', '']
+ALLOWED_HOSTS = ['localhost', 'datecheck.lifehqapp.com', '167.99.132.42', '127.0.0.1']
 
 WEBPACK_LOADER = {
     'DEFAULT': {
