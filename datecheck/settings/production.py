@@ -1,4 +1,5 @@
 from .base import *
+print("Using production settings")
 DEBUG = False
 DATABASES = {
     'default': {

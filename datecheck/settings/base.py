@@ -26,7 +26,7 @@ PROJECT_CONTAINER = os.path.dirname(PROJECT_ROOT)
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'ibp@)dm$h&lbxa9ysj2e2zi=y4hh3kwefbbznp+y06c%pzn^i#'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'datecheck.lifehqapp.com', '']
 
 WEBPACK_LOADER = {
     'DEFAULT': {
@@ -34,6 +34,26 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(PROJECT_ROOT, 'webpack-stats.json'),
     }
 }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/tmp/debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
 # Application definition
 SITE_ID = 1
 INSTALLED_APPS = [
