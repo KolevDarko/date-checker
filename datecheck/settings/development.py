@@ -7,8 +7,8 @@ DEBUG = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'datechecker',
-        'USER': 'datechecker',
+        'NAME': 'datecheck',
+        'USER': 'datecheck',
         'PASSWORD': 'sup3rSECR3T!@#',
         'HOST': 'localhost',
         'PORT': '5432',
