@@ -10,4 +10,5 @@ class MyUserAdmin(UserAdmin):
             (None, {'fields': ('store',)}),
     )
 
+
 admin.site.register(MyUser, MyUserAdmin)

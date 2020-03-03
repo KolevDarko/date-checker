@@ -56,7 +56,8 @@ class BatchWarningViewSet(viewsets.ModelViewSet):
 class ActiveBatchWarningsView(views.APIView):
 
     def get(self, request):
-        active_warnings = BatchWarning.get_active(request.user.store_id)
+        last_id = request.GET.get('last_id', None)
+        active_warnings = BatchWarning.get_active(request.user.store_id, last_id=last_id)
         return Response(active_warnings)
 
 

@@ -182,9 +182,16 @@ class BatchWarning(models.Model, ModelMixin):
         return (expiration_date - datetime.datetime.utcnow().date()).days
 
     @classmethod
-    def get_active(cls, store_id):
-        active_warnings = cls.objects.filter(product_batch__store_id=store_id, status=cls.STATUS_NEW).select_related(
-            'product_batch', 'product_batch__product').order_by('product_batch__expiration_date')
+    def get_active(cls, store_id, last_id=None):
+        if last_id:
+            active_warnings = cls.objects.filter(product_batch__store_id=store_id, status=cls.STATUS_NEW,
+                                                 pk__gt=last_id).select_related('product_batch',
+                                                                                'product_batch__product').order_by(
+                'product_batch__expiration_date')
+        else:
+            active_warnings = cls.objects.filter(product_batch__store_id=store_id,
+                                                 status=cls.STATUS_NEW).select_related(
+                'product_batch', 'product_batch__product').order_by('product_batch__expiration_date')
         results = []
         for warning in active_warnings:
             results.append({
