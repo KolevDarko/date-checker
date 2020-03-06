@@ -187,7 +187,7 @@ class BatchWarning(models.Model, ModelMixin):
             active_warnings = cls.objects.filter(product_batch__store_id=store_id, status=cls.STATUS_NEW,
                                                  id__gt=last_id).select_related('product_batch',
                                                                                 'product_batch__product').order_by(
-                'product_batch__expiration_date')
+                'product_batch__expiration_date', 'id')
         else:
             active_warnings = cls.objects.filter(product_batch__store_id=store_id,
                                                  status=cls.STATUS_NEW).select_related(
