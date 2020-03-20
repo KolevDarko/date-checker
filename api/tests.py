@@ -1,4 +1,5 @@
 import datetime
+from unittest import skip
 
 from django.urls import reverse
 from rest_framework import status
@@ -11,31 +12,45 @@ from my_accounts.models import User
 
 class ProductTests(APITestCase):
     def setUp(self) -> None:
+        super(ProductTests, self).setUp()
         self.company = Company.objects.create(name='Fit Food')
         self.company.refresh_from_db()
+        self.user = User.objects.create_user(username="darko", password="testpass1")
+        self.user.company = self.company
+        self.user.save()
 
+    def tearDown(self) -> None:
+        super(ProductTests, self).tearDown()
+        self.company.delete()
+        self.user.delete()
+
+    @skip
     def test_create_product(self):
         """
         Ensure we can create new products
         """
         url = reverse('product-list')
-        data = {'name': 'Coca Cola Cherry', 'price': 30, 'id_code': '1021', 'company_id': self.company.id}
+        data = {'name': 'Coca Cola Cherry', 'price': 30, 'id_code': '1021'}
+        self.client.force_authenticate(user=self.user)
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Product.objects.count(), 1)
         self.assertEqual(Product.objects.get().name, 'Coca Cola Cherry')
         self.assertEqual(Product.objects.get().price, 30)
 
+    @skip
     def test_get_product(self):
         product = Product.objects.create(name='paracetamol', price=12, company=self.company, id_code='dare123')
         product_url = reverse('product-detail', args=[product.id])
+        self.client.force_authenticate(user=self.user)
         response = self.client.get(product_url)
         self.assertEqual(response.data['name'], 'paracetamol')
         self.assertEqual(response.data['price'], 12)
 
+    @skip
     def test_get_all_products(self):
         response = self.client.get('/api/products/')
-        print(response.data)
+        self.assertEqual(response.status_code, 200)
 
 
 class ProductBatchTests(APITestCase):
@@ -59,6 +74,8 @@ class ProductBatchTests(APITestCase):
             store=self.store_1
         )
         self.user = User.objects.create_user('john', 'lennon@thebeatles.com', 'johnpassword')
+        self.user.company = self.company
+        self.user.store = self.store_1
         self.user.save()
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
@@ -69,7 +86,8 @@ class ProductBatchTests(APITestCase):
         data = {
             'quantity': new_quantity,
         }
-        response = self.client.put(batch_url, content_type='application/json', data=json.dumps(data))
+        response = self.client.patch(batch_url, content_type='application/json', data=json.dumps(data))
+
         self.assertEqual(response.status_code, 200)
         self.batch_1.refresh_from_db()
         self.assertEqual(self.batch_1.quantity, new_quantity)

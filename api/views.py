@@ -17,6 +17,10 @@ class ProductViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Product.objects.filter(company_id=self.request.user.company_id)
 
+    def create(self, request, *args, **kwargs):
+        request.data['company'] = request.user.company
+        return super(ProductViewSet, self).create(request, *args, **kwargs)
+
 
 class StoreViewSet(viewsets.ModelViewSet):
     """
