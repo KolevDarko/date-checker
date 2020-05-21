@@ -30,7 +30,6 @@ class StoreViewSet(viewsets.ModelViewSet):
 
 
 class ProductBatchViewSet(viewsets.ModelViewSet):
-    queryset = ProductBatch.objects.all()
     serializer_class = ProductBatchSerializer
 
     # def get_serializer(self, *args, **kwargs):
@@ -75,12 +74,12 @@ class ProductBatchSyncView(views.APIView):
     """
 
     def post(self, request):
-        serialized = ProductBatchSerializer(data=request.data, many=True)
-        if serialized.is_valid():
-            serialized.save()
-            return Response(serialized.data)
-        else:
-            return JsonResponse(status=400, data={'errors': serialized.errors})
+        result_ids = []
+        for batch_data in request.data:
+            new_batch = ProductBatch.create_from_client(batch_data, request.user.store_id)
+            result_ids.append(new_batch.id)
+        return JsonResponse(data={'serverIds': result_ids})
+
 
     def put(self, request):
         batch_data = json.loads(request.body)
@@ -89,11 +88,11 @@ class ProductBatchSyncView(views.APIView):
         return Response()
 
     def update_batch(self, batch_data):
-        batch = ProductBatch.get_by_id(batch_data['id'])
+        batch = ProductBatch.get_by_id(batch_data['serverId'])
         batch.update_quantity(batch_data['quantity'])
         if batch_data['quantity'] == 0:
             batch_archive = ProductBatchArchive.create_batch_archive(batch)
             BatchWarning.archive_warnings(batch.id, batch_archive.id)
 
     def update_warnings(self, batch_data):
-        BatchWarning.silence_warnings(batch_data['id'], batch_data['quantity'])
+        BatchWarning.silence_warnings(batch_data['serverId'], batch_data['quantity'])

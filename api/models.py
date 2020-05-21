@@ -89,6 +89,17 @@ class ProductBatch(models.Model, ModelMixin):
             id_code=data.id_code
         )
 
+    @classmethod
+    def create_from_client(cls, client_data, store_id):
+        return cls.objects.create(
+            store_id=store_id,
+            product=client_data.productId,
+            original_quantity=client_data.quantity,
+            quantity=client_data.quantity,
+            created_on=parse(client_data.created),
+            expiration_date=parse(client_data.expirationDate)
+        )
+
     def update_quantity(self, new_quantity):
         self.quantity = new_quantity
         self.save()
