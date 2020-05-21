@@ -72,13 +72,13 @@ class ProductBatchSyncView(views.APIView):
     """
      Uploads new product batches and returns ids for them
     """
-
     def post(self, request):
-        result_ids = []
+        result_batches = []
         for batch_data in request.data:
             new_batch = ProductBatch.create_from_client(batch_data, request.user.store_id)
-            result_ids.append(new_batch.id)
-        return JsonResponse(data={'serverIds': result_ids})
+            result_batches.append(new_batch)
+        serialized = ProductBatchSerializer(result_batches, many=True)
+        return Response(serialized.data)
 
 
     def put(self, request):
