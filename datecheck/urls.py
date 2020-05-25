@@ -23,8 +23,8 @@ from rest_framework.authtoken import views as auth_views
 router = routers.DefaultRouter()
 router.register(r'stores', views.StoreViewSet)
 router.register(r'products', views.ProductViewSet)
-router.register(r'product-batches', views.ProductBatchViewSet)
-router.register(r'batch-warnings', views.BatchWarningViewSet)
+router.register(r'product-batches', views.ProductBatchViewSet, basename='product-batch')
+router.register(r'batch-warnings', views.BatchWarningViewSet, basename='batch-warning')
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
