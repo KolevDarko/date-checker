@@ -30,7 +30,7 @@ router.register(r'batch-warnings', views.BatchWarningViewSet, basename='batch-wa
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     url(r'api-token-auth', auth_views.obtain_auth_token),
-    url(r'api/warnings/active/', views.ActiveBatchWarningsView.as_view(), name='active-warnings'),
+    url(r'api/warnings/', views.ActiveBatchWarningsView.as_view(), name='active-warnings'),
     url(r'api/sync/products/(?P<product_id>\w+)', views.ProductsSyncView.as_view(), name='sync-products'),
     url(r'api/sync/batches/', views.ProductBatchSyncView.as_view(), name='sync-batches'),
     path('api/', include(router.urls)),

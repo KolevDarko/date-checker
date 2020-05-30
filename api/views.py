@@ -3,6 +3,7 @@ from rest_framework import viewsets, views
 from rest_framework.response import Response
 from rest_framework.utils import json
 
+from api.controllers import BatchController
 from api.models import BatchWarning, ProductBatchArchive
 from api.serializers import *
 
@@ -59,6 +60,16 @@ class ActiveBatchWarningsView(views.APIView):
         active_warnings = BatchWarning.get_active(request.user.store_id, last_id=last_id)
         return Response(active_warnings)
 
+    def put(self, request):
+        data = json.loads(request.body)
+        for batch_warning in data['batchWarnings']:
+            warning_id = batch_warning['id']
+            new_quantity = batch_warning['quantity']
+            batch_id = batch_warning['productBatchId']
+            BatchController.update_warnings(batch_id, new_quantity)
+            BatchController.update_batch(batch_id, new_quantity)
+        return JsonResponse({'success': True})
+
 
 class ProductsSyncView(views.APIView):
 
@@ -83,16 +94,6 @@ class ProductBatchSyncView(views.APIView):
 
     def put(self, request):
         batch_data = json.loads(request.body)
-        self.update_warnings(batch_data)
-        self.update_batch(batch_data)
-        return Response()
-
-    def update_batch(self, batch_data):
-        batch = ProductBatch.get_by_id(batch_data['serverId'])
-        batch.update_quantity(batch_data['quantity'])
-        if batch_data['quantity'] == 0:
-            batch_archive = ProductBatchArchive.create_batch_archive(batch)
-            BatchWarning.archive_warnings(batch.id, batch_archive.id)
-
-    def update_warnings(self, batch_data):
-        BatchWarning.silence_warnings(batch_data['serverId'], batch_data['quantity'])
+        BatchController.update_warnings(batch_data['serverId'], batch_data['quantity'])
+        BatchController.update_batch(batch_data['serverId'], batch_data['quantity'])
+        return JsonResponse({'success': True})
