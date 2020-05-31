@@ -40,7 +40,6 @@ class ProductBatchViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return ProductBatch.objects.filter(product__company_id=self.request.user.company_id)
 
-
 class BatchWarningViewSet(viewsets.ModelViewSet):
     queryset = BatchWarning.objects.all()
     serializer_class = BatchWarningSerializer
