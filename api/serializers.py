@@ -19,6 +19,7 @@ class ProductBatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductBatch
         fields = '__all__'
+        depth = 1
 
 class BatchWarningSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
