@@ -92,7 +92,7 @@ class ProductBatchSyncView(views.APIView):
 
 
     def put(self, request):
-        batch_data = json.loads(request.body)
-        BatchController.update_warnings(batch_data['serverId'], batch_data['quantity'])
-        BatchController.update_batch(batch_data['serverId'], batch_data['quantity'])
+        for batch_data in request.data:
+            BatchController.update_warnings(batch_data['serverId'], batch_data['quantity'])
+            BatchController.update_batch(batch_data['serverId'], batch_data['quantity'])
         return JsonResponse({'success': True})

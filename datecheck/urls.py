@@ -26,6 +26,7 @@ router.register(r'products', views.ProductViewSet)
 router.register(r'product-batches', views.ProductBatchViewSet, basename='product-batch')
 router.register(r'batch-warnings', views.BatchWarningViewSet, basename='batch-warning')
 
+
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
