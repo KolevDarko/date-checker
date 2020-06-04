@@ -93,11 +93,11 @@ class ProductBatch(models.Model, ModelMixin):
     def create_from_client(cls, client_data, store_id):
         return cls.objects.create(
             store_id=store_id,
-            product=client_data['productId'],
+            product_id=client_data['productId'],
             original_quantity=client_data['quantity'],
             quantity=client_data['quantity'],
             created_on=parse(client_data['created']),
-            expiration_date=parse(client_data['expirationDate'])
+            expiration_date=parse(client_data['expirationDate']).date()
         )
 
     def update_quantity(self, new_quantity):
