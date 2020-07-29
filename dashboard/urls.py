@@ -11,5 +11,5 @@ urlpatterns = [
     url(r'product-batch-list/(?P<pk>\w+)$', ProductBatchEditView.as_view(), name='dash-product-batch-edit'),
     url(r'product-batch-list$', ProductBatchListView.as_view(), name='dash-product-batch-list'),
     url(r'batch-warning-list$', BatchWarningListView.as_view(), name='dash-warnings'),
-    url(r'', CompanyHomeView.as_view(), name='home'),
+    url(r'', BatchWarningListView.as_view(), name='home'),
 ]

@@ -20,6 +20,8 @@ from rest_framework import routers
 from api import views
 from rest_framework.authtoken import views as auth_views
 
+from dashboard.views import CompanyHomeView, BatchWarningListView
+
 router = routers.DefaultRouter()
 router.register(r'stores', views.StoreViewSet)
 router.register(r'products', views.ProductViewSet)
@@ -39,4 +41,5 @@ urlpatterns = [
     url(r'dash/', include('dashboard.urls')),
     path('admin/', admin.site.urls, name='admin'),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'', BatchWarningListView.as_view(), name='first-home'),
 ]
