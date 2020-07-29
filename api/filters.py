@@ -1,5 +1,4 @@
 import django_filters
-
 from api.models import ProductBatch, Product, BatchWarning
 
 

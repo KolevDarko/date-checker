@@ -48,7 +48,7 @@
           {{ filterset.form.product.errors }}
           <label for="id_product" class="label field-label">Производ</label>
           <div class="control is-expanded field-body">
-            <select id="id_product" required name="product" class="select is-fullwidth"
+            <select id="id_product" name="product" class="select is-fullwidth"
                     data-target="product-batch.productSelect">
               {% for option in filterset.form.product.field.choices %}
                 {% if option.0 == filterset.form.initial.product %}
