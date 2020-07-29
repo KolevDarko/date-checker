@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block css_init %}
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/css/select2.min.css" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" rel="stylesheet"/>
 {% endblock %}
 {% block content %}
@@ -57,7 +56,7 @@
 
           <div class="field">
             {{ form.quantity.errors }}
-            <label for="id_quantity" class="label">Quantity</label>
+            <label for="id_quantity" class="label">Количина</label>
             <div class="control">
               <input class="input" value="{{ form.initial.quantity }}" required name="quantity" id="id_quantity">
             </div>
@@ -65,7 +64,7 @@
 
           <div class="field">
             {{ form.id_code.errors }}
-            <label for="id_id_code" class="label">Id code</label>
+            <label for="id_id_code" class="label">Пратка број</label>
             <div class="control">
               <input class="input" value="{{ form.initial.id_code }}" required name="id_code" id="id_id_code">
             </div>
@@ -73,7 +72,7 @@
 
           <div class="field">
             {{ form.expiration_date.errors }}
-            <label for="id_expiration_date" class="label">Expiration date</label>
+            <label for="id_expiration_date" class="label">Истекува на</label>
             <div class="control">
               <input class="input datepicker" autocomplete="off" required value="{{ form.initial.expiration_date|date:'Y-m-d' }}" name="expiration_date" id="id_expiration_date">
             </div>

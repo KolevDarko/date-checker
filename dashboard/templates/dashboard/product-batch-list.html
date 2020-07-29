@@ -10,54 +10,99 @@
     </ul>
   </nav>
   <div class="title">Листа на пратки</div>
-  <section>
+  {#  <section>#}
+  {#    <div class="columns">#}
+  {#      <div class="column is-12">#}
+  {#        <form action="" method="get" class="filter-form">#}
+  {#          <p></p>#}
+  {#          {{ filterset.form.as_p }}#}
+  {#          <p>#}
+  {#            <input type="submit" class="button is-small is-info" value="Барај">#}
+  {#          </p>#}
+  {#        </form>#}
+  {#      </div>#}
+  {#    </div>#}
+  {#  </section>#}
+  <section data-controller="product-batch">
     <div class="columns">
       <div class="column is-12">
-        <form action="" method="get" class="filter-form">
-          {{ filterset.form.as_p }}
-          <p>
-            <input type="submit" class="button is-small is-info" value="Барај">
-          </p>
-        </form>
+      <form action="" method="get" class="filter-form">
+        <div class="field is-horizontal">
+          {{ filterset.form.store.errors }}
+          <label for="id_store" class="label field-label">Локација</label>
+          <div class="control field-body is-expanded">
+            <select id="id_store" required name="store" class="select is-fullwidth"
+                    data-target="product-batch.locationSelect">
+              {% for option in filterset.form.store.field.choices %}
+                {% if option.0 == filterset.form.initial.store %}
+                  <option selected="selected" value="{{ option.0 }}">{{ option.1 }}</option>
+                {% else %}
+                  <option value="{{ option.0 }}">{{ option.1 }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <div class="field is-horizontal">
+          {{ filterset.form.product.errors }}
+          <label for="id_product" class="label field-label">Производ</label>
+          <div class="control is-expanded field-body">
+            <select id="id_product" required name="product" class="select is-fullwidth"
+                    data-target="product-batch.productSelect">
+              {% for option in filterset.form.product.field.choices %}
+                {% if option.0 == filterset.form.initial.product %}
+                  <option selected="selected" value="{{ option.0 }}">{{ option.1 }}</option>
+                {% else %}
+                  <option value="{{ option.0 }}">{{ option.1 }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+          <div>
+            <input type="submit" class="button is-info is-small" value="Барај">
+          </div>
+      </form>
       </div>
+      {#      <form action="" method="get" class="filter-form">#}
+      {#        <div class="field is-horizontal">#}
+      {#          <label for="id_store" class="label field-label">Локација</label>#}
+      {#          <div class="control field-body is-expanded">#}
+      {#            <select id="id_store" name="store" class="select is-fullwidth"#}
+      {#                    data-target="product-batch.locationSelect">#}
+      {#              {% for option in filterset.form.store.field.choices %}#}
+      {#                {% if option.0 == filterset.form.initial.store %}#}
+      {#                  <option selected="selected" value="{{ option.0 }}">{{ option.1 }}</option>#}
+      {#                {% else %}#}
+      {#                  <option value="{{ option.0 }}">{{ option.1 }}</option>#}
+      {#                {% endif %}#}
+      {#              {% endfor %}#}
+      {#            </select>#}
+      {#          </div>#}
+      {#        </div>#}
+      {#        <div class="field is-horizontal">#}
+      {#          <label for="id_product" class="label field-label">Производ</label>#}
+      {#          <div class="control is-expanded field-body">#}
+      {#            <select id="id_product" name="product" class="select is-fullwidth"#}
+      {#                    data-target="product-batch.productSelect">#}
+      {#              {% for option in filterset.form.product.field.choices %}#}
+      {#                {% if option.0 == filterset.form.initial.product %}#}
+      {#                  <option selected="selected" value="{{ option.0 }}">{{ option.1 }}</option>#}
+      {#                {% else %}#}
+      {#                  <option value="{{ option.0 }}">{{ option.1 }}</option>#}
+      {#                {% endif %}#}
+      {#              {% endfor %}#}
+      {#            </select>#}
+      {#          </div>#}
+      {#        </div>#}
+      {#        <div>#}
+      {#          <input type="submit" class="button is-info is-small" value="Барај">#}
+      {#        </div>#}
+      {#      </form>#}
     </div>
   </section>
 
-{#    <form action="" method="get" class="filter-form">#}
-{#      <div class="field is-horizontal">#}
-{#        <label for="id_store" class="label field-label">Location</label>#}
-{#        <div class="control field-body is-expanded">#}
-{#          <select id="id_store" name="store" class="select is-fullwidth"#}
-{#                  data-target="product-batch.locationSelect">#}
-{#            {% for option in filterset.form.store.field.choices %}#}
-{#              {% if option.0 == filterset.form.initial.store %}#}
-{#                <option selected="selected" value="{{ option.0 }}">{{ option.1 }}</option>#}
-{#              {% else %}#}
-{#                <option value="{{ option.0 }}">{{ option.1 }}</option>#}
-{#              {% endif %}#}
-{#            {% endfor %}#}
-{#          </select>#}
-{#        </div>#}
-{#      </div>#}
-{#      <div class="field is-horizontal">#}
-{#        <label for="id_product" class="label field-label">Product</label>#}
-{#        <div class="control is-expanded field-body">#}
-{#          <select id="id_product" name="product" class="select is-fullwidth"#}
-{#                  data-target="product-batch.productSelect">#}
-{#            {% for option in filterset.form.product.field.choices %}#}
-{#              {% if option.0 == filterset.form.initial.product %}#}
-{#                <option selected="selected" value="{{ option.0 }}">{{ option.1 }}</option>#}
-{#              {% else %}#}
-{#                <option value="{{ option.0 }}">{{ option.1 }}</option>#}
-{#              {% endif %}#}
-{#            {% endfor %}#}
-{#          </select>#}
-{#        </div>#}
-{#      </div>#}
-{#    <div>#}
-{#      <input type="submit" class="button is-info is-small" value="Filter">#}
-{#    </div>#}
-{#    </form>#}
   <section class="pagination-table">
     <table class="table" data-controller="product-batch-table">
       <thead>

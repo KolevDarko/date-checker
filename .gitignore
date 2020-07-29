@@ -116,3 +116,6 @@ dmypy.json
 node_modules
 package-lock.json
 webpack-stats.json
+
+# Project ignored files
+datecheck/static/js/base.js
