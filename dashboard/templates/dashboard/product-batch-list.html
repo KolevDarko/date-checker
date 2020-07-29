@@ -31,7 +31,7 @@
           {{ filterset.form.store.errors }}
           <label for="id_store" class="label field-label">Локација</label>
           <div class="control field-body is-expanded">
-            <select id="id_store" required name="store" class="select is-fullwidth"
+            <select id="id_store" name="store" class="select is-fullwidth"
                     data-target="product-batch.locationSelect">
               {% for option in filterset.form.store.field.choices %}
                 {% if option.0 == filterset.form.initial.store %}
